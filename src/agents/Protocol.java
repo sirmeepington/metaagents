@@ -7,14 +7,10 @@ package agents;
 
 /**
  *
- * @author v8076743
+ * @author Aidan
  */
-public interface DHCPClient {
+public enum Protocol {
     
-    public void dhcpDiscover();
-    
-    public void dhcpRequest(String sender);
-    
-    public void handleDhcp(Message message);
+    DHCP;
     
 }

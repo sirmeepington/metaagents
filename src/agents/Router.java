@@ -15,7 +15,7 @@ public class Router extends Portal implements DHCPServer, NetworkedAgent {
     
     private final String ipAddress = "192.168.1.1";
     
-    private ArrayBlockingQueue<String> ips = new ArrayBlockingQueue<>(255);
+    private final ArrayBlockingQueue<String> ips = new ArrayBlockingQueue<>(255);
     
     public Router(int capacity, String name) {
         super(capacity, name);
@@ -48,7 +48,7 @@ public class Router extends Portal implements DHCPServer, NetworkedAgent {
     @Override
     public void dhcpOffer(Message message) {
         // Say we exist. 
-        execute(new Message(message.getSender(), "Offer", getSendAddress(),"DHCP"));
+        execute(new Message(message.getSender(), "Offer", getQualifiedAddress(),Protocol.DHCP));
     }
 
     @Override
@@ -58,7 +58,7 @@ public class Router extends Portal implements DHCPServer, NetworkedAgent {
             return;
         
         String sender = message.getSender(); // MAC address
-        execute(new Message(sender, "Acknowledge|"+ip,getSendAddress(),"DHCP"));
+        execute(new Message(sender, "Acknowledge|"+ip,getQualifiedAddress(),Protocol.DHCP));
     }
 
     @Override
@@ -78,7 +78,7 @@ public class Router extends Portal implements DHCPServer, NetworkedAgent {
     public void setMacAddress(String macAddress) { }
 
     @Override
-    public String getSendAddress() {
+    public String getQualifiedAddress() {
         return getIpAddress() == null ? getMacAddress() : getIpAddress();
     }
     
