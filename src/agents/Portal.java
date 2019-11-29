@@ -48,15 +48,15 @@ public class Portal extends MetaAgent {
     @Override
     protected void execute(Message message){
         
-        if (message.getReceiptant().equals(Wildcard.ALL.getChar())){
+        if (message.getRecipient().equals(Wildcard.ALL.getChar())){
             agents.forEach(a -> a.parse(message));
             return;
         }
         
-        MetaAgent receive = getSubAgent(message.getReceiptant());
+        MetaAgent receive = getSubAgent(message.getRecipient());
         if (receive == null)
         {
-            System.err.println("Invalid receiptant: "+message.getReceiptant());
+            System.err.println("Invalid receiptant: "+message.getRecipient());
             return;
         }
         receive.parse(message);

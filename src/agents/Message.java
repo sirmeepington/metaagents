@@ -11,7 +11,7 @@ package agents;
  */
 public class Message {
     
-    private String protocol;
+    private Protocol protocol;
     private String recipient;
     private String message;
     private String sender;
@@ -22,7 +22,7 @@ public class Message {
         this.sender = sender;
     }
 
-    public Message(String receiptant, String message, String sender, String protocol) {
+    public Message(String receiptant, String message, String sender, Protocol protocol) {
         this.recipient = receiptant;
         this.message = message;
         this.sender = sender;
@@ -35,14 +35,14 @@ public class Message {
         this.sender = sender;
     }
     
-    public Message(Wildcard reciptant, String message, String sender, String protocol){
+    public Message(Wildcard reciptant, String message, String sender, Protocol protocol){
         this.recipient = reciptant.getChar();
         this.message = message;
         this.sender = sender;
         this.protocol = protocol;
     }
     
-    public Message(MetaAgent recipient, String message, String sender, String protocol){
+    public Message(MetaAgent recipient, String message, String sender, Protocol protocol){
         this.recipient = recipient.getName();
         this.message = message;
         this.sender = sender;
@@ -58,7 +58,7 @@ public class Message {
     }
     
     
-    public String getReceiptant() {
+    public String getRecipient() {
         return recipient;
     }
 
@@ -79,7 +79,7 @@ public class Message {
         return "\""+message+"\" for "+recipient;
     }
     
-    public String getProtocol(){
+    public Protocol getProtocol(){
         return this.protocol;
     }
     

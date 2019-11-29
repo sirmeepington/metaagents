@@ -38,15 +38,15 @@ public class Agents {
         router.addAgent(a8);
         router.addAgent(a9);
         
-        a1.discover();
-        a2.discover();
-        a3.discover();
-        a4.discover();
-        a5.discover();
-        a6.discover();
-        a7.discover();
-        a8.discover();
-        a9.discover();
+        a1.dhcpDiscover();
+        a2.dhcpDiscover();
+        a3.dhcpDiscover();
+        a4.dhcpDiscover();
+        a5.dhcpDiscover();
+        a6.dhcpDiscover();
+        a7.dhcpDiscover();
+        a8.dhcpDiscover();
+        a9.dhcpDiscover();
         
         
         // Ending a portal ends all of its sub-agents.

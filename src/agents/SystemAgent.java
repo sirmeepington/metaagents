@@ -44,15 +44,15 @@ public class SystemAgent extends MetaAgent implements DHCPClient, NetworkedAgent
     }
 
     @Override
-    public void discover() {
-        System.out.println("\nSystem "+getSendAddress()+" broadcasting discovery inent for DHCP.");
-        getParent().execute(new Message(Wildcard.ALL,"Discover",getSendAddress(),"DHCP"));
+    public void dhcpDiscover() {
+        System.out.println("\nSystem "+getQualifiedAddress()+" broadcasting discovery inent for DHCP.");
+        getParent().execute(new Message(Wildcard.ALL,"Discover",getQualifiedAddress(),Protocol.DHCP));
     }
 
     @Override
-    public void request(String sender) {
-        System.out.println("System "+getSendAddress()+" asking "+sender+" for IP address.");
-        getParent().execute(new Message(sender, "Request", getSendAddress(), "DHCP"));
+    public void dhcpRequest(String sender) {
+        System.out.println("System "+getQualifiedAddress()+" asking "+sender+" for IP address.");
+        getParent().execute(new Message(sender, "Request", getQualifiedAddress(), Protocol.DHCP));
     }
 
     @Override
@@ -68,18 +68,18 @@ public class SystemAgent extends MetaAgent implements DHCPClient, NetworkedAgent
         switch (msg.toLowerCase()){
             case "offer":
                 System.out.println("Receieved server offer from "+message.getSender());
-                request(message.getSender());
+                dhcpRequest(message.getSender());
                 break;
             case "acknowledge":
                 String ip = in[1];
-                System.out.println("System "+getSendAddress()+" aknowledged IP "+ip+" from "+message.getSender());
+                System.out.println("System "+getQualifiedAddress()+" aknowledged IP "+ip+" from "+message.getSender());
                 setIpAddress(ip);
         }
     }
 
     @Override
     protected boolean canReceive(Message message) {
-        return super.canReceive(message) || message.getReceiptant().equals(getSendAddress());
+        return super.canReceive(message) || message.getRecipient().equals(getQualifiedAddress());
     }
 
     @Override
@@ -89,7 +89,7 @@ public class SystemAgent extends MetaAgent implements DHCPClient, NetworkedAgent
 
     @Override
     public void setIpAddress(String ipAddress) {
-        System.out.println("IP address of "+getSendAddress()+" set to "+ipAddress);
+        System.out.println("IP address of "+getQualifiedAddress()+" set to "+ipAddress);
         this.ipAddress = ipAddress;
     }
 
@@ -104,7 +104,7 @@ public class SystemAgent extends MetaAgent implements DHCPClient, NetworkedAgent
     }
     
     @Override
-    public String getSendAddress() {
+    public String getQualifiedAddress() {
         return getIpAddress() == null ? getMacAddress() : getIpAddress();
     }
 

@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  * @see Message
  * @author v8076743
  */
-public abstract class MetaAgent extends ArrayBlockingQueue<Message> {
+public abstract class MetaAgent {
     
     /**
      * The Thread that the MetaAgent is currently running on.
@@ -32,15 +32,17 @@ public abstract class MetaAgent extends ArrayBlockingQueue<Message> {
      * The parent Portal that messages will be redirected to if this agent
      * cannot handle them.
      */
-    private final Portal parent;
+    private final MetaAgent parent;
+    
+    private final ArrayBlockingQueue<Message> queue;
     
     /**
      * Whether or not the thread should be running.
      */
     private volatile boolean running = true;
     
-    public MetaAgent(int capacity, String name, Portal parent) {
-        super(capacity);
+    public MetaAgent(int capacity, String name, MetaAgent parent) {
+        this.queue = new ArrayBlockingQueue<>(capacity);
         this.parent = parent;
         this.name = name;
         initThread();
@@ -58,7 +60,7 @@ public abstract class MetaAgent extends ArrayBlockingQueue<Message> {
                 while (running){
                     Message m;
                     try {
-                        m = take();
+                        m = queue.take();
                         if (m != null)
                             parse(m);
                     } catch (InterruptedException ex) { }
@@ -78,8 +80,7 @@ public abstract class MetaAgent extends ArrayBlockingQueue<Message> {
         if (message == null)
             return;
 
-        boolean receive = canReceive(message);
-        if (receive){
+        if (canReceive(message)){
             execute(message);
         } else {
             getParent().parse(message);
@@ -98,9 +99,9 @@ public abstract class MetaAgent extends ArrayBlockingQueue<Message> {
      * @return Whether the message can be received and parsed.
      */
     protected boolean canReceive(Message message){
-        if (message.getReceiptant() == null)
+        if (message.getRecipient() == null)
             return false;
-        return message.getReceiptant().equals(getName()) || message.getReceiptant().equals(Wildcard.ALL.getChar());
+        return message.getRecipient().equals(getName()) || message.getRecipient().equals(Wildcard.ALL.getChar());
     }
 
     /**
@@ -111,7 +112,11 @@ public abstract class MetaAgent extends ArrayBlockingQueue<Message> {
         return name;
     }
 
-    public Portal getParent(){
+    /**
+     * Gets the parent agent of this agent.
+     * @return The parent agent.
+     */
+    public MetaAgent getParent(){
         return parent;
     }
     
