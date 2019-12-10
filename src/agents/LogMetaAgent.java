@@ -16,7 +16,7 @@ public class LogMetaAgent extends MetaAgent {
     }
 
     @Override
-    protected void execute(Message message) {
+    public void execute(Message message) {
         System.out.println(message+" received by "+getName());
     }
     

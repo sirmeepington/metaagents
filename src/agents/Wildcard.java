@@ -20,7 +20,8 @@ public enum Wildcard {
         this.wildcard = wildcard;
     }
     
-    public String getChar(){
+    @Override
+    public String toString(){
         return wildcard;
     }
     

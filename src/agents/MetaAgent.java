@@ -6,8 +6,6 @@
 package agents;
 
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Abstract MetaAgent class that implements a receiving and parsing behaviour 
@@ -34,6 +32,10 @@ public abstract class MetaAgent {
      */
     private final MetaAgent parent;
     
+    /**
+     * The Queue that will be used to block the worker thread and await any 
+     * inbound messages.
+     */
     private final ArrayBlockingQueue<Message> queue;
     
     /**
@@ -91,7 +93,7 @@ public abstract class MetaAgent {
      * Executes the behaviour of this agent for the respective message.
      * @param message The message to execute the behaviour of.
      */
-    protected abstract void execute(Message message);
+    public abstract void execute(Message message);
     
     /**
      * Whether or not the MetaAgent can receive and parse the message passed.
@@ -101,7 +103,7 @@ public abstract class MetaAgent {
     protected boolean canReceive(Message message){
         if (message.getRecipient() == null)
             return false;
-        return message.getRecipient().equals(getName()) || message.getRecipient().equals(Wildcard.ALL.getChar());
+        return message.getRecipient().equals(getName()) || message.getRecipient().equals(Wildcard.ALL.toString());
     }
 
     /**

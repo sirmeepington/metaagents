@@ -5,6 +5,9 @@
  */
 package agents;
 
+import agents.dhcp.DhcpClientAgent;
+import agents.dhcp.DhcpServerAgent;
+
 /**
  *
  * @author v8076743
@@ -16,19 +19,21 @@ public class Agents {
      */
     public static void main(String[] args) {
         
-        Router router = new Router(100, "192.168.1.1");
+        Portal router = new Portal(100, "192.168.1.1");
         
-        SystemAgent a1 = new SystemAgent(5, router);
-        SystemAgent a2 = new SystemAgent(5, router);
-        SystemAgent a3 = new SystemAgent(5, router);
-        SystemAgent a4 = new SystemAgent(5, router);
-        SystemAgent a5 = new SystemAgent(5, router);
-        SystemAgent a6 = new SystemAgent(5, router);
-        SystemAgent a7 = new SystemAgent(5, router);
-        SystemAgent a8 = new SystemAgent(5, router);
-        SystemAgent a9 = new SystemAgent(5, router);
-       
+        DhcpClientAgent a1 = new DhcpClientAgent(5, router);
+        DhcpClientAgent a2 = new DhcpClientAgent(5, router);
+        DhcpClientAgent a3 = new DhcpClientAgent(5, router);
+        DhcpClientAgent a4 = new DhcpClientAgent(5, router);
+        DhcpClientAgent a5 = new DhcpClientAgent(5, router);
+        DhcpClientAgent a6 = new DhcpClientAgent(5, router);
+        DhcpClientAgent a7 = new DhcpClientAgent(5, router);
+        DhcpClientAgent a8 = new DhcpClientAgent(5, router);
+        DhcpClientAgent a9 = new DhcpClientAgent(5, router);
+        DhcpServerAgent s1 = new DhcpServerAgent(5, router);
+
         router.addAgent(a1);
+        router.addAgent(s1);
         router.addAgent(a2);
         router.addAgent(a3);
         router.addAgent(a4);

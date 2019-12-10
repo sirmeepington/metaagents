@@ -5,14 +5,12 @@
  */
 package agents;
 
-import java.util.concurrent.ArrayBlockingQueue;
-
 /**
  *
- * @author v8076743
+ * @author Aidan
  */
-public class Router {
-    
-   
-    
+public enum MessageType {
+    DHCP,
+    AHP,
+    PING;
 }

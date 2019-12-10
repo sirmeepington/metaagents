@@ -6,6 +6,7 @@
 package agents;
 
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 /**
  *
@@ -16,16 +17,16 @@ public class Portal extends MetaAgent {
     /**
      * The sub-agents of this portal.
      */
-    private final ArrayList<MetaAgent> agents;
+    private final TreeMap<String,MetaAgent> agents;
     
     public Portal(int capacity, String name) {
         super(capacity, name, null);
-        agents = new ArrayList<>();
+        agents = new TreeMap<>();
     }
     
     public Portal(int capacity, String name, Portal parent){
         super(capacity, name, parent);
-        agents = new ArrayList<>();
+        agents = new TreeMap<>();
     }
     
     /**
@@ -46,10 +47,10 @@ public class Portal extends MetaAgent {
      * @param message The message to pass on.
      */
     @Override
-    protected void execute(Message message){
+    public void execute(Message message){
         
-        if (message.getRecipient().equals(Wildcard.ALL.getChar())){
-            agents.forEach(a -> a.parse(message));
+        if (message.getRecipient().equals(Wildcard.ALL.toString())){
+            agents.forEach((s,a) -> a.parse(message));
             return;
         }
         
@@ -63,7 +64,7 @@ public class Portal extends MetaAgent {
     }
     
     protected MetaAgent getSubAgent(String name){
-        for(MetaAgent agent : agents){
+        for(MetaAgent agent : agents.values()){
             if (agent instanceof Portal){
                 MetaAgent subagent = ((Portal) agent).getSubAgent(name);
                 if (subagent != null)
@@ -77,13 +78,13 @@ public class Portal extends MetaAgent {
     }
 
     public void addAgent(MetaAgent a){
-        if (!agents.contains(a))
-            agents.add(a);
+        if (!agents.containsKey(a.getName()))
+            agents.put(a.getName(), a);
     }
     
     @Override
     public void end(){
-        agents.forEach((a) -> a.end());
+        agents.forEach((s,a) -> a.end());
         super.end();
     }
     

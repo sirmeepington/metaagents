@@ -3,18 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package agents;
+package agents.dhcp;
+
+import agents.Message;
 
 /**
  *
  * @author v8076743
  */
-public interface DHCPClient {
+public interface DhcpServer {
     
-    public void dhcpDiscover();
+    public void dhcpOffer(Message message);
     
-    public void dhcpRequest(String sender);
-    
-    public void handleDhcp(Message message);
+    public void dhcpAcknowledge(Message message);
     
 }
