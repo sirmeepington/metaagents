@@ -127,6 +127,7 @@ public abstract class MetaAgent {
      */
     public void end(){
         running = false;
+        thread.interrupt();
     }
     
     @Override

@@ -13,7 +13,8 @@ import agents.Protocol;
 import agents.Wildcard;
 
 /**
- *
+ * MetaAgent implementation of the client-side version of the DHCP protocol.
+ * @see DhcpClient
  * @author Aidan
  */
 public class DhcpClientAgent extends NetworkableAgent implements DhcpClient {
@@ -22,12 +23,17 @@ public class DhcpClientAgent extends NetworkableAgent implements DhcpClient {
         super(capacity, parent);
     }
     
+    /**
+     * Executes the {@link #handleDhcp(agents.Message)} method if the message
+     * can be received and is using the DHCP protocol.
+     * @param message The incoming message.
+     */
     @Override
     public void execute(Message message){
         if (canReceive(message) && message.getProtocol() == Protocol.DHCP)
             handleDhcp(message);
     }
-    
+
     @Override
     public void dhcpDiscover() {
         System.out.println("\nSystem "+getQualifiedAddress()+" broadcasting discovery inent for DHCP.");
@@ -44,6 +50,9 @@ public class DhcpClientAgent extends NetworkableAgent implements DhcpClient {
     public void handleDhcp(Message message) {
         if (message == null || message.getProtocol() != Protocol.DHCP)
             return;
+        
+        if (getIpAddress() == null || getIpAddress().trim().equals(""))
+            return; // IP has already been set. DHCP process is unnecessary.
         
         String msg = EncodingUtil.BytesToString(message.getData());
         String[] in = msg.split("\\|");

@@ -58,21 +58,30 @@ public abstract class NetworkableAgent extends SystemAgent {
     /**
      * Returns the most qualified address for the networked agent.
      * Implementing classes can choose which address is more qualifying in
-     * the circumstances for itself.
+     * the circumstances for itself by overriding this method. 
+     * By default this method chooses the IP address over the MAC address for
+     * then NetworkableAgent, (If IP is null then MAC else IP).
      * @return The most qualified address for the networked agent.
      */
     public String getQualifiedAddress(){
         return getIpAddress() == null ? getMacAddress() : getIpAddress();
     }
   
-   
+   /**
+    * Assigns a random MAC address for the NetworkableAgent.
+    * Creates a 6-byte array for MAC address and creates a String identifier
+    * from it in the format of XX:XX:XX:XX:XX:XX.
+    * MAC addresses created via this method are not completely guaranteed to be
+    * unique; however, unique occurrences of the same MAC address is unlikely as
+    * the seed for the random creation is based from the system's nano-time.
+    */
     protected final void assignMac(){
         Random rand = new Random(System.nanoTime());
         byte[] mac = new byte[6];
         rand.nextBytes(mac);
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < mac.length; i++){
-             sb.append(Integer.toHexString(0xff & mac[i]));
+             sb.append(String.format("%02X", (0xff & mac[i])));
              if (i != mac.length-1)
                  sb.append(":");
         }
@@ -84,6 +93,12 @@ public abstract class NetworkableAgent extends SystemAgent {
         return super.canReceive(message) || message.getRecipient().equals(getQualifiedAddress());
     }    
     
+    /**
+     * Returns the qualified address of the NetworkableAgent as the name of the
+     * agent is unnecessary in the case of MAC and IP based networking.
+     * @return The Qualified address of the NetworkableAgent.
+     * @see #getQualifiedAddress() 
+     */
     @Override
     public String getName(){
         return getQualifiedAddress();

@@ -13,12 +13,19 @@ import agents.Protocol;
 import java.util.concurrent.ArrayBlockingQueue;
 
 /**
- *
+ * MetaAgent implementation of the server-side behaviour of the DHCP process.
+ * @see DhcpServer
  * @author Aidan
  */
 public class DhcpServerAgent extends NetworkableAgent implements DhcpServer {
 
+    /**
+     * A queue of IP addresses that manage the in-order issuing of IP addresses.
+     */
     private final ArrayBlockingQueue<String> ips = new ArrayBlockingQueue<>(255);
+    
+    // TODO: Write a way for the DHCP server to remember / manage what IP
+    // address belongs to what MAC address.
     
     public DhcpServerAgent(int capacity, Portal parent) {
         super(capacity, parent);
@@ -68,6 +75,11 @@ public class DhcpServerAgent extends NetworkableAgent implements DhcpServer {
         execute(new Message(sender, EncodingUtil.StringToBytes("Acknowledge|"+ip),getQualifiedAddress(),Protocol.DHCP));
     }
 
+    /**
+     * Overridden setter for IP address which does not change the IP of the
+     * DHCP server; as its IP must be set statically.
+     * @param ipAddress Incoming IP address.
+     */
     @Override
     public void setIpAddress(String ipAddress) { }
 
