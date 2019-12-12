@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package agents.dhcp;
+package agents.impl.dhcp;
 
 import agents.util.EncodingUtil;
 import agents.Message;

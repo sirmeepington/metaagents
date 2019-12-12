@@ -5,8 +5,8 @@
  */
 package agents;
 
-import agents.dhcp.DhcpClientAgent;
-import agents.dhcp.DhcpServerAgent;
+import agents.impl.dhcp.DhcpClientAgent;
+import agents.impl.dhcp.DhcpServerAgent;
 
 /**
  *

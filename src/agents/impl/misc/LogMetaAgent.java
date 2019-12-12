@@ -3,7 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package agents;
+package agents.impl.misc;
+
+import agents.Message;
+import agents.MetaAgent;
+import agents.Portal;
 
 /**
  * A basic implementation of a MetaAgent which logs to the screen messages
