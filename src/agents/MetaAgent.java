@@ -6,8 +6,6 @@
 package agents;
 
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Abstract MetaAgent class that implements a receiving and parsing behaviour 
@@ -20,6 +18,8 @@ public abstract class MetaAgent {
     
     /**
      * The Thread that the MetaAgent is currently running on.
+     * A thread will be running per-MetaAgent; and as such may use up all of the
+     * allotted threads for the process when the MetaAgent count is too high.
      */
     private Thread thread;
     
@@ -31,13 +31,25 @@ public abstract class MetaAgent {
     /**
      * The parent Portal that messages will be redirected to if this agent
      * cannot handle them.
+     * In the case that the parent is null; the message will be simply dropped.
      */
     private final MetaAgent parent;
     
+    /**
+     * The Queue that will be used to block the worker thread and await any 
+     * inbound messages.
+     * This queue blocks the thread if a message cannot be found and will notify
+     * the thread after a message is found to allow it to process.
+     */
     private final ArrayBlockingQueue<Message> queue;
     
     /**
      * Whether or not the thread should be running.
+     * This is relatively unused due to the fact that the queue is blocking;
+     * the best way to end the thread is via {@link Thread#interrupt()} as it
+     * ensures the death of the thread. However; setting this to false and
+     * sending another message will give this thread a soft death compared to 
+     * the hard death of an interrupt signal.
      */
     private volatile boolean running = true;
     
@@ -52,6 +64,7 @@ public abstract class MetaAgent {
      * Initialises the worker thread for this MetaAgent.
      * Peeks data and polls if not null.
      * Parses non-null data that is polled.
+     * @see #parse(agents.Message) 
      */
     private void initThread(){
         thread = new Thread(){
@@ -91,7 +104,7 @@ public abstract class MetaAgent {
      * Executes the behaviour of this agent for the respective message.
      * @param message The message to execute the behaviour of.
      */
-    protected abstract void execute(Message message);
+    public abstract void execute(Message message);
     
     /**
      * Whether or not the MetaAgent can receive and parse the message passed.
@@ -101,7 +114,7 @@ public abstract class MetaAgent {
     protected boolean canReceive(Message message){
         if (message.getRecipient() == null)
             return false;
-        return message.getRecipient().equals(getName()) || message.getRecipient().equals(Wildcard.ALL.getChar());
+        return message.getRecipient().equals(getName()) || message.getRecipient().equals(Wildcard.ALL.toString());
     }
 
     /**
@@ -122,11 +135,19 @@ public abstract class MetaAgent {
     
     /**
      * End the worker thread for this MetaAgent, setting Running to false.
+     * This will also interrupt the thread (due to blocking behaviour on the
+     * Message Queue) and cause a 'hard' death for the thread.
      */
     public void end(){
         running = false;
+        thread.interrupt();
     }
     
+    /**
+     * Returns the string interpretation of the MetaAgent.
+     * @return The meta agent's name preceded by a string that shows that this
+     * is a meta agent.
+     */
     @Override
     public String toString() {
         return "Meta Agent: "+name;

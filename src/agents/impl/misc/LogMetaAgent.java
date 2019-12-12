@@ -3,10 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package agents;
+package agents.impl.misc;
+
+import agents.Message;
+import agents.MetaAgent;
+import agents.Portal;
 
 /**
- * 
+ * A basic implementation of a MetaAgent which logs to the screen messages
+ * received.
+ * The {@code execute} method of this implementation only outputs the string
+ * representation of the method to standard output.
  * @author v8076743
  */
 public class LogMetaAgent extends MetaAgent {
@@ -16,7 +23,7 @@ public class LogMetaAgent extends MetaAgent {
     }
 
     @Override
-    protected void execute(Message message) {
+    public void execute(Message message) {
         System.out.println(message+" received by "+getName());
     }
     
