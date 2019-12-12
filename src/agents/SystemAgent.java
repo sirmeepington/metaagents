@@ -6,7 +6,10 @@
 package agents;
 
 /**
- *
+ * An abstract system-level agent that is used to discern a different in heading
+ * for its child classes.
+ * SystemAgents are more based towards the behaviour of a system instead of the
+ * behaviour of a process within a system.
  * @author v8076743
  */
 public abstract class SystemAgent extends MetaAgent {

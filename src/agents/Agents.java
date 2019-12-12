@@ -9,7 +9,7 @@ import agents.impl.dhcp.DhcpClientAgent;
 import agents.impl.dhcp.DhcpServerAgent;
 
 /**
- *
+ * Main class for demonstrating and testing the behaviour of the MAS.
  * @author v8076743
  */
 public class Agents {

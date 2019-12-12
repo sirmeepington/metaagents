@@ -8,7 +8,7 @@ package agents;
 import java.util.concurrent.ArrayBlockingQueue;
 
 /**
- *
+ * TODO: Implement socked-based networking between two MAS processes. :)
  * @author v8076743
  */
 public class Router {
