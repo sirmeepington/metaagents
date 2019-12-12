@@ -54,6 +54,7 @@ public abstract class MetaAgent {
      * Initialises the worker thread for this MetaAgent.
      * Peeks data and polls if not null.
      * Parses non-null data that is polled.
+     * @see #parse(agents.Message) 
      */
     private void initThread(){
         thread = new Thread(){
@@ -124,6 +125,8 @@ public abstract class MetaAgent {
     
     /**
      * End the worker thread for this MetaAgent, setting Running to false.
+     * This will also interrupt the thread (due to blocking behaviour on the
+     * Message Queue).
      */
     public void end(){
         running = false;

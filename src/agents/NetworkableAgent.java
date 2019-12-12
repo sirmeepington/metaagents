@@ -8,9 +8,14 @@ package agents;
 import java.util.Random;
 
 /**
- * A networked agent interface which provides the signature for getters and
- * setters for IP and MAC address as well as a method for getting a more
- * qualified address out of the two.
+ * An extension of MetaAgent that provides methods and variables for IP and MAC
+ * addresses as well as the getters/setters and behaviour to assign a random MAC
+ * address on creation of the agent. 
+ * This agent replaces the {@code name} variable with a MAC address on creation
+ * and overrides {@link agents.MetaAgent#getName()} by returning the most
+ * qualified address for the NetworkableAgent. 
+ * @see #getQualifiedAddress() 
+ * @see #getName() 
  * @author v8076743
  */
 public abstract class NetworkableAgent extends SystemAgent {

@@ -13,7 +13,7 @@ import agents.Message;
  * to clients that request them. 
  * The DHCP server offers its service to clients that have broadcasted its
  * discovery intent; it also acknowledges a request for an IP address via its
- * {@link #dhcpAcknowledge(agents.Message)) method, which sends the IP address
+ * {@link #dhcpAcknowledge(agents.Message)} method, which sends the IP address
  * within the message.
  * @author v8076743
  */

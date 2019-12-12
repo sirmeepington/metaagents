@@ -9,7 +9,11 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 /**
- *
+ * A Portal MetaAgent whose main purpose is to redirect incoming messages to
+ * its children.
+ * The portal is required to receive messages and redirect them to the 
+ * applicable children via the {@link MetaAgent#canReceive(agents.Message)}
+ * method that more concrete implementations of the class have overridden.
  * @author v8076743
  */
 public class Portal extends MetaAgent {
@@ -63,6 +67,11 @@ public class Portal extends MetaAgent {
         receive.parse(message);
     }
     
+    /**
+     * Gets the child MetaAgent of the Portal from the input name {@code name}.
+     * @param name The name of the MetaAgent.
+     * @return The MetaAgent to retrieve from its name.
+     */
     protected MetaAgent getSubAgent(String name){
         for(MetaAgent agent : agents.values()){
             if (agent instanceof Portal){
@@ -77,11 +86,23 @@ public class Portal extends MetaAgent {
         return null;
     }
 
+    /**
+     * Adds a Meta-Agent to the tree of children on this Portal.
+     * If a Meta-Agent of the same name already is contained in this portal
+     * then it is not added.
+     * @param a The MetaAgent to add.
+     */
     public void addAgent(MetaAgent a){
-        if (!agents.containsKey(a.getName()))
+        if (!agents.containsKey(a.getName())){
             agents.put(a.getName(), a);
+        }
     }
     
+    /**
+     * Sends the command to end for all children of the portal and then ends
+     * this portal.
+     * @see MetaAgent#end() 
+     */
     @Override
     public void end(){
         agents.forEach((s,a) -> a.end());

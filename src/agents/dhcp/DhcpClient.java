@@ -28,7 +28,7 @@ public interface DhcpClient {
     /**
      * Sends a request to the DHCP server that has replied via their 'Offer'
      * message.
-     * @see DhcpServer#dhcpOffer(agents.Message
+     * @see DhcpServer#dhcpOffer(agents.Message)
      * @param sender The qualifying address of the DHCP server.
      * @see DhcpServerAgent#dhcpOffer(agents.Message) 
      */

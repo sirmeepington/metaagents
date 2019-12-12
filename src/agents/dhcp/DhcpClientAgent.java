@@ -51,7 +51,7 @@ public class DhcpClientAgent extends NetworkableAgent implements DhcpClient {
         if (message == null || message.getProtocol() != Protocol.DHCP)
             return;
         
-        if (getIpAddress() == null || getIpAddress().trim().equals(""))
+        if (getIpAddress() != null && !getIpAddress().trim().equals(""))
             return; // IP has already been set. DHCP process is unnecessary.
         
         String msg = EncodingUtil.BytesToString(message.getData());

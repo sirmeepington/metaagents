@@ -6,7 +6,10 @@
 package agents;
 
 /**
- * 
+ * A basic implementation of a MetaAgent which logs to the screen messages
+ * received.
+ * The {@code execute} method of this implementation only outputs the string
+ * representation of the method to standard output.
  * @author v8076743
  */
 public class LogMetaAgent extends MetaAgent {

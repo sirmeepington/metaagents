@@ -8,13 +8,21 @@ package agents;
 import java.io.UnsupportedEncodingException;
 
 /**
- *
+ * A message object that is instantiated to send message back and forth
+ * between MetaAgents.
  * @author v8076743
  */
 public class Message {
     
-    private MessageType typeId;
+    /**
+     * The protocol that the message is using. 
+     * This is used in the MetaAgent's parsing of the message to decide
+     * what behaviour to use.
+     */
     private Protocol protocol;
+    /**
+     * The name of the recipient of the 
+     */
     private String recipient;
     private byte[] data;
     private String sender;
@@ -92,14 +100,6 @@ public class Message {
     
     public Protocol getProtocol(){
         return this.protocol;
-    }
-    
-    public MessageType getMessageType(){
-        return typeId;
-    }
-
-    public void setMessageType(MessageType type){
-        this.typeId = type;
     }
     
     public void setFlags(byte flags){
