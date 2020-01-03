@@ -53,11 +53,17 @@ public class Portal extends MetaAgent {
     @Override
     public void execute(Message message){
         
+        if (!message.ping())
+            return;
         if (message.getRecipient().equals(Wildcard.ALL.toString())){
             agents.forEach((s,a) -> a.parse(message));
             return;
         }
         
+        executeOnSubAgent(message);
+    }
+    
+    protected void executeOnSubAgent(Message message){
         MetaAgent receive = getSubAgent(message.getRecipient());
         if (receive == null)
         {

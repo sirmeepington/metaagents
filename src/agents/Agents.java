@@ -7,6 +7,7 @@ package agents;
 
 import agents.impl.dhcp.DhcpClientAgent;
 import agents.impl.dhcp.DhcpServerAgent;
+import agents.util.EncodingUtil;
 
 /**
  * Main class for demonstrating and testing the behaviour of the MAS.
@@ -52,8 +53,7 @@ public class Agents {
         a7.dhcpDiscover();
         a8.dhcpDiscover();
         a9.dhcpDiscover();
-        
-        
+  
         // Ending a portal ends all of its sub-agents.
         router.end();
     }

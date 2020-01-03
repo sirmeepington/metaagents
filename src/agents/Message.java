@@ -5,6 +5,7 @@
  */
 package agents;
 
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -12,7 +13,7 @@ import java.nio.charset.StandardCharsets;
  * between MetaAgents.
  * @author v8076743
  */
-public class Message {
+public class Message implements Serializable {
     
     /**
      * The protocol that the message is using. 
@@ -47,6 +48,11 @@ public class Message {
      * message; such as do-not-reply, etc.
      */
     private byte flags;
+    
+    /**
+     * The amount of bounces the messages can have before it dies.
+     */
+    private int bounces = 100;
 
     public Message(String receiptant, byte[] data, String sender) {
         this.recipient = receiptant;
@@ -174,6 +180,13 @@ public class Message {
      */
     public byte getFlags(){
         return flags;
+    }
+    
+    public boolean ping(){
+        if (bounces <= 0)
+            return false;
+        bounces--;
+        return true;
     }
     
 }
