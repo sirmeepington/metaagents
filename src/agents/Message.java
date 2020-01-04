@@ -153,6 +153,8 @@ public class Message implements Serializable {
      */
     @Override
     public String toString() {
+        if (data == null || recipient == null)
+            return "Message with null data / recipient";
         return "\""+new String(data,StandardCharsets.UTF_8)+"\" for "+recipient;
     }
     
@@ -170,8 +172,12 @@ public class Message implements Serializable {
      * Sets the flags to the byte given.
      * @param flags The flag byte.
      */
-    public void setFlags(byte flags){
+    protected final void setFlags(byte flags){
         this.flags = flags;
+    }
+    
+    protected final void setProtocol(Protocol protocol){
+        this.protocol = protocol;
     }
     
     /**

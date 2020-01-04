@@ -38,8 +38,13 @@ public enum Protocol {
     /**
      * This message is to be used for networking protocols over sockets.
      * For example a message with this protocol can be used to send
-     * identification to a Socket Server.
+     * messages to a Socket Server.
      */
-    NET;
+    NET,
+    
+    /**
+     * This message is used for identification over sockets.
+     */
+    IDENT;
     
 }
