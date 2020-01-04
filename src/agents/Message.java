@@ -7,6 +7,7 @@ package agents;
 
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
+import java.util.EnumSet;
 
 /**
  * A message object that is instantiated to send message back and forth
@@ -47,7 +48,7 @@ public class Message implements Serializable {
      * This will need developing on to provide additional information about the
      * message; such as do-not-reply, etc.
      */
-    private byte flags;
+    private int flags;
     
     /**
      * The amount of bounces the messages can have before it dies.
@@ -181,11 +182,19 @@ public class Message implements Serializable {
     }
     
     /**
-     * Returns the flag byte.
-     * @return The flag byte.
+     * Returns the flag value.
+     * @return The flag value.
      */
-    public byte getFlags(){
-        return flags;
+    public EnumSet<Flags> getFlags(){
+        return Flags.fromInt(flags);
+    }
+    
+    /**
+     * Sets the flag value to the flags given.
+     * @param flags An EnumSet of the flags given.
+     */
+    public void setFlags(EnumSet<Flags> flags){
+        this.flags = Flags.toInt(flags);
     }
     
     public boolean ping(){

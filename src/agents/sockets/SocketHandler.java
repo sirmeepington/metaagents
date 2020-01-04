@@ -5,6 +5,7 @@
  */
 package agents.sockets;
 
+import agents.Flags;
 import agents.Message;
 import agents.Protocol;
 import agents.util.EncodingUtil;
@@ -12,7 +13,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import static java.lang.System.in;
 import java.util.concurrent.ArrayBlockingQueue;
 
 /**
@@ -69,15 +69,15 @@ public class SocketHandler extends Thread {
             return;
         }
 
-        Message m = parseQueue.remove();
-        Message message = (Message) EncodingUtil.BytesToObj(m.getData());
-        if (message == null) {
-            return;
+        Message message = parseQueue.remove();
+        if (message.getFlags().contains(Flags.WRAPPED)){
+            message = (Message) EncodingUtil.BytesToObj(message.getData());
         }
 
         if (message.getProtocol() == Protocol.IDENT) {
             server.identify(connection, message.getSender());
         }
+        
 
         if (!message.getRecipient().equals(server.getName())) {
             messagesToSend.add(message);
@@ -95,8 +95,12 @@ public class SocketHandler extends Thread {
         // Do parsing.
         Message message = messagesToSend.remove();
         System.out.println("["+getName()+"] Found message to send: " + message);
+        if (message.getFlags().contains(Flags.WRAPPED)){
+            message = (Message) EncodingUtil.BytesToObj(message.getData());
+        }
 
-        if (!message.getRecipient().equals(connection.getClientName())) {
+        if (!message.getRecipient().equals(connection.getClientName()) 
+                && !message.getFlags().contains(Flags.INTERNAL)) {
             SocketHandler handler = server.getHandler(message.getRecipient());
             if (handler == null) {
                 System.out.println("["+getName()+"] I can't find the recipient. Have they identified?");
@@ -105,7 +109,6 @@ public class SocketHandler extends Thread {
             System.out.println("["+getName()+"] Found SocketConnection for " + message.getRecipient() + ": " + handler.getName());
             handler.add(message);
         } else {
-
             try {
                 ObjectOutputStream out = new ObjectOutputStream(connection.getConnection().getOutputStream());
                 out.writeObject(message);

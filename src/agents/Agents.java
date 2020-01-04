@@ -7,7 +7,6 @@ package agents;
 
 import agents.impl.dhcp.DhcpClientAgent;
 import agents.impl.dhcp.DhcpServerAgent;
-import agents.util.EncodingUtil;
 
 /**
  * Main class for demonstrating and testing the behaviour of the MAS.
