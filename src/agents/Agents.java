@@ -52,8 +52,7 @@ public class Agents {
         a7.dhcpDiscover();
         a8.dhcpDiscover();
         a9.dhcpDiscover();
-        
-        
+  
         // Ending a portal ends all of its sub-agents.
         router.end();
     }

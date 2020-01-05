@@ -5,6 +5,11 @@
  */
 package agents.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -39,4 +44,25 @@ public class EncodingUtil {
          return new String(in,StandardCharsets.UTF_8);
     }
     
+    public static byte[] ObjToBytes(Object in){
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream o = new ObjectOutputStream(baos);
+            o.writeObject(in);
+            o.flush();
+            return baos.toByteArray();
+        } catch (IOException ex){
+            return null;
+        }
+    }
+    
+    public static Object BytesToObj(byte[] in){
+        try {
+            ByteArrayInputStream baos = new ByteArrayInputStream(in);
+            ObjectInputStream o = new ObjectInputStream(baos);
+            return o.readObject();
+        } catch (IOException | ClassNotFoundException ex){
+            return null;
+        }
+    }
 }

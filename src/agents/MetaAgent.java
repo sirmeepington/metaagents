@@ -33,7 +33,7 @@ public abstract class MetaAgent {
      * cannot handle them.
      * In the case that the parent is null; the message will be simply dropped.
      */
-    private final MetaAgent parent;
+    private final Portal parent;
     
     /**
      * The Queue that will be used to block the worker thread and await any 
@@ -53,7 +53,7 @@ public abstract class MetaAgent {
      */
     private volatile boolean running = true;
     
-    public MetaAgent(int capacity, String name, MetaAgent parent) {
+    public MetaAgent(int capacity, String name, Portal parent) {
         this.queue = new ArrayBlockingQueue<>(capacity);
         this.parent = parent;
         this.name = name;
@@ -70,18 +70,28 @@ public abstract class MetaAgent {
         thread = new Thread(){
             @Override
             public void run() {
-                while (running){
-                    Message m;
-                    try {
-                        m = queue.take();
-                        if (m != null)
-                            parse(m);
-                    } catch (InterruptedException ex) { }
-                }
+                threadRun();
             }
         };
         thread.setName("Thread for "+getClass().getSimpleName()+" "+name);
         thread.start();
+    }
+    
+    /**
+     * Runs the logic that would usually happen within the running of the 
+     * anonymous backing thread.
+     * This is to allow for overriding within child classes should the need
+     * arise for changing the running operation of the agent.
+     */
+    protected void threadRun(){
+        while (isRunning()){
+            Message m;
+            try {
+                m = queue.take();
+                if (m != null)
+                    parse(m);
+            } catch (InterruptedException ex) { }
+        }
     }
     
     /**
@@ -91,6 +101,8 @@ public abstract class MetaAgent {
      */
     protected void parse(Message message){
         if (message == null)
+            return;
+        if (!message.bounce())
             return;
 
         if (canReceive(message)){
@@ -129,7 +141,7 @@ public abstract class MetaAgent {
      * Gets the parent agent of this agent.
      * @return The parent agent.
      */
-    public MetaAgent getParent(){
+    public Portal getParent(){
         return parent;
     }
     
@@ -151,5 +163,21 @@ public abstract class MetaAgent {
     @Override
     public String toString() {
         return "Meta Agent: "+name;
+    }
+    
+    /**
+     * Is the backing thread to this MetaAgent currently running?
+     * @return True if the current thread is running; false otherwise.
+     */
+    public boolean isRunning(){
+        return running;
+    }
+    
+    /**
+     * Returns the Queue for this MetaAgent.
+     * @return The Meta-Agent's queue.
+     */
+    protected ArrayBlockingQueue<Message> getQueue(){
+        return queue;
     }
 }

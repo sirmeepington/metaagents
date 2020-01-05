@@ -5,14 +5,9 @@
  */
 package agents;
 
-import java.util.concurrent.ArrayBlockingQueue;
-
 /**
- * TODO: Implement socked-based networking between two MAS processes. :)
+ * This class has been deprecated for a socket based implementation found below.
+ * @see agents.impl.sockets
  * @author v8076743
  */
-public class Router {
-    
-   
-    
-}
+public class Router { }

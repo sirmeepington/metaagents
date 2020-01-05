@@ -5,14 +5,16 @@
  */
 package agents;
 
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
+import java.util.EnumSet;
 
 /**
  * A message object that is instantiated to send message back and forth
  * between MetaAgents.
  * @author v8076743
  */
-public class Message {
+public class Message implements Serializable {
     
     /**
      * The protocol that the message is using. 
@@ -46,7 +48,12 @@ public class Message {
      * This will need developing on to provide additional information about the
      * message; such as do-not-reply, etc.
      */
-    private byte flags;
+    private int flags;
+    
+    /**
+     * The amount of bounces the messages can have before it dies.
+     */
+    private int bounces = 100;
 
     public Message(String receiptant, byte[] data, String sender) {
         this.recipient = receiptant;
@@ -147,6 +154,8 @@ public class Message {
      */
     @Override
     public String toString() {
+        if (data == null || recipient == null)
+            return "Message with null data / recipient";
         return "\""+new String(data,StandardCharsets.UTF_8)+"\" for "+recipient;
     }
     
@@ -164,16 +173,45 @@ public class Message {
      * Sets the flags to the byte given.
      * @param flags The flag byte.
      */
-    public void setFlags(byte flags){
+    protected final void setFlags(byte flags){
         this.flags = flags;
     }
     
     /**
-     * Returns the flag byte.
-     * @return The flag byte.
+     * Sets the current protocol for the message.
+     * @param protocol The new protocol to use for this message.
      */
-    public byte getFlags(){
-        return flags;
+    protected final void setProtocol(Protocol protocol){
+        this.protocol = protocol;
+    }
+    
+    /**
+     * Returns the flag value.
+     * @return The flag value.
+     */
+    public EnumSet<Flags> getFlags(){
+        return Flags.fromInt(flags);
+    }
+    
+    /**
+     * Sets the flag value to the flags given.
+     * @param flags An EnumSet of the flags given.
+     */
+    public void setFlags(EnumSet<Flags> flags){
+        this.flags = Flags.toInt(flags);
+    }
+    
+    /**
+     * Shows that the message has bounced to a client; and that it should 
+     * decrement the {@link #bounces} counter.
+     * @return True if the bounces count above 0 before the bounce happened;
+     * false otherwise.
+     */
+    public boolean bounce(){
+        if (bounces <= 0)
+            return false;
+        bounces--;
+        return true;
     }
     
 }

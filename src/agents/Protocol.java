@@ -33,6 +33,18 @@ public enum Protocol {
      * System messages should be interpreted as from other agent within the
      * system and are not a result of direct user input.
      */
-    SYS;
+    SYS,
+    
+    /**
+     * This message is to be used for networking protocols over sockets.
+     * For example a message with this protocol can be used to send
+     * messages to a Socket Server.
+     */
+    NET,
+    
+    /**
+     * This message is used for identification over sockets.
+     */
+    IDENT;
     
 }
