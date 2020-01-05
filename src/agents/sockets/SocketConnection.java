@@ -9,40 +9,59 @@ import java.net.Socket;
 import java.util.Objects;
 
 /**
- *
- * @author Paul
+ * A connection to the SocketServer which contains the identifiable information
+ * for the socket and the underlying connection itself.
+ * @author Aidan
  */
 public class SocketConnection {
     
+    /**
+     * The underlying socket connection to the server.
+     */
+    private final Socket connection;
     
-    private Socket connection;
-    
+    /**
+     * The identifiable name for this connection.
+     */
     private String clientName;
 
     public SocketConnection(Socket connection){
         this.connection = connection;
     }
 
-    
+    /**
+     * Returns the socket object from the connection object.
+     * @return The underlying socket for this connection.
+     */
     public Socket getConnection() {
         return connection;
     }
 
-    public void setConnection(Socket connection) {
-        this.connection = connection;
-    }
-
+    /**
+     * Gets the client name from this client.
+     * @return The client name.
+     */
     public String getClientName() {
         return clientName;
     }
 
-    public void setClientName(String ClientName) {
-        this.clientName = ClientName;
+    /**
+     * Sets the client's name.
+     * This is updated during identification within 
+     * {@link SocketServer#identify(agents.sockets.SocketConnection,
+     * java.lang.String)}.
+     * Ideally this is only ran ONCE when the connection has been set up.
+     * @param clientName The new client name for this connection.
+     */
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode() ^ connection.hashCode(); //To change body of generated methods, choose Tools | Templates.
+        // Does not calculate clientName as we want the only discerning factor
+        // to be the underlying connection itself.
+        return super.hashCode() ^ connection.hashCode(); 
     }
 
     @Override

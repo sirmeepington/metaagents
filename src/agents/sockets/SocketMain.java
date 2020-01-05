@@ -14,8 +14,8 @@ import agents.util.EncodingUtil;
 import java.util.EnumSet;
 
 /**
- *
- * @author Paul
+ * Main method to show feature of sockets on localhost.
+ * @author Aidan
  */
 public class SocketMain {
     

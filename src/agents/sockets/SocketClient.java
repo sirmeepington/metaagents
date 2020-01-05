@@ -18,17 +18,27 @@ import java.net.Socket;
 import java.util.EnumSet;
 
 /**
- *
- * @author Paul
+ * A socket client that employs a regular {@link Socket} to communicate to a 
+ * {@link SocketServer}. This SocketClient contains the underlying connection
+ * from the viewpoint of client; whilst the viewpoint of the server is stored 
+ * elsewhere.
+ * @see SocketServer
+ * @author Aidan
  */
 public class SocketClient extends SocketAgent {
 
+    /**
+     * The socket connected to the server from the client.
+     */
     private Socket client;
     
+    /**
+     * Is the current thread running?
+     */
     private volatile boolean running;
     
     public SocketClient(int capacity, String name, Portal parent, int port) {
-        super(capacity, name, parent, port, false);
+        super(capacity, name, parent, port);
     }
     
     @Override
@@ -43,13 +53,14 @@ public class SocketClient extends SocketAgent {
         }
         
         while (running){
-            
             take();
             give();
-            
         }
     }
     
+    /**
+     * Takes a message from the stream and creates an object from it.
+     */
     private void take(){
         try {
             InputStream str = client.getInputStream();
@@ -90,6 +101,10 @@ public class SocketClient extends SocketAgent {
         }
     }
 
+    /**
+     * Queues a message onto the client to be sent to the socket server.
+     * @param message The message to send to the socket server.
+     */
     @Override
     public void execute(Message message) {
         getQueue().add(message);

@@ -177,6 +177,10 @@ public class Message implements Serializable {
         this.flags = flags;
     }
     
+    /**
+     * Sets the current protocol for the message.
+     * @param protocol The new protocol to use for this message.
+     */
     protected final void setProtocol(Protocol protocol){
         this.protocol = protocol;
     }
@@ -197,7 +201,13 @@ public class Message implements Serializable {
         this.flags = Flags.toInt(flags);
     }
     
-    public boolean ping(){
+    /**
+     * Shows that the message has bounced to a client; and that it should 
+     * decrement the {@link #bounces} counter.
+     * @return True if the bounces count above 0 before the bounce happened;
+     * false otherwise.
+     */
+    public boolean bounce(){
         if (bounces <= 0)
             return false;
         bounces--;

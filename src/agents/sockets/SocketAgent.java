@@ -5,31 +5,31 @@
  */
 package agents.sockets;
 
-import agents.Message;
 import agents.MetaAgent;
 import agents.Portal;
 
 /**
  * A Meta-Agent that is used to route messages through a socket.
- * @author v8076743
+ * @author Aidan
  */
 public abstract class SocketAgent extends MetaAgent {
     
+    /**
+     * The server port.
+     */
     private final int port;
-    private final boolean isServer;
     
-    public SocketAgent(int capacity, String name, Portal parent, int port, boolean isServer) {
+    public SocketAgent(int capacity, String name, Portal parent, int port) {
         super(capacity, name, parent);
         this.port = port;
-        this.isServer = isServer;
     }   
     
+    /**
+     * Returns the port that the SocketAgent is using.
+     * @return The port.
+     */
     public int getPort(){
         return this.port;
-    }
-    
-    public boolean isServer(){
-        return isServer;
     }
     
 }

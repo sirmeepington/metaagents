@@ -78,9 +78,10 @@ public abstract class MetaAgent {
     }
     
     /**
-     * Runs the logic that would usually happen within an anonymous thread.
+     * Runs the logic that would usually happen within the running of the 
+     * anonymous backing thread.
      * This is to allow for overriding within child classes should the need
-     * arise.
+     * arise for changing the running operation of the agent.
      */
     protected void threadRun(){
         while (isRunning()){
@@ -101,7 +102,7 @@ public abstract class MetaAgent {
     protected void parse(Message message){
         if (message == null)
             return;
-        if (!message.ping())
+        if (!message.bounce())
             return;
 
         if (canReceive(message)){
@@ -172,6 +173,10 @@ public abstract class MetaAgent {
         return running;
     }
     
+    /**
+     * Returns the Queue for this MetaAgent.
+     * @return The Meta-Agent's queue.
+     */
     protected ArrayBlockingQueue<Message> getQueue(){
         return queue;
     }
