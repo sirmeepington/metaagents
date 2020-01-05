@@ -7,7 +7,7 @@ package agents;
 
 /**
  * This class has been deprecated for a socket based implementation found below.
- * @see agents.sockets
+ * @see agents.impl.sockets
  * @author v8076743
  */
 public class Router { }

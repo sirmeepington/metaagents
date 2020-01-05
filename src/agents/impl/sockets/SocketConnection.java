@@ -48,7 +48,7 @@ public class SocketConnection {
     /**
      * Sets the client's name.
      * This is updated during identification within 
-     * {@link SocketServer#identify(agents.sockets.SocketConnection,
+     * {@link SocketServer#identify(agents.impl.sockets.SocketConnection,
      * java.lang.String)}.
      * Ideally this is only ran ONCE when the connection has been set up.
      * @param clientName The new client name for this connection.
