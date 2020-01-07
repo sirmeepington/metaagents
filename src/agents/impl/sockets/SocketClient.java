@@ -82,7 +82,8 @@ public class SocketClient extends SocketAgent {
             return;
         Message message = getQueue().remove();
         try {
-            if (message.getFlags().contains(Flags.WRAPPED) && message.getSender().equals(getName())){
+            if (message.getFlags().contains(Flags.WRAPPED) 
+                    && message.getSender().equals(getName())){
                 message = (Message)EncodingUtil.BytesToObj(message.getData());
             }
             System.out.println("["+getName()+"] Sending message (" +

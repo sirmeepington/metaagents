@@ -36,14 +36,14 @@ public class DhcpClientAgent extends NetworkableAgent implements DhcpClient {
 
     @Override
     public void dhcpDiscover() {
-        System.out.println("\nSystem "+getQualifiedAddress()+" broadcasting discovery inent for DHCP.");
-        getParent().execute(new Message(Wildcard.ALL,EncodingUtil.StringToBytes("Discover"),getQualifiedAddress(),Protocol.DHCP));
+        System.out.println("\n"+"[DCHP Client "+getName()+"] System "+getQualifiedAddress()+" broadcasting discovery inent for DHCP.");
+        getParent().addMessage(new Message(Wildcard.ALL,EncodingUtil.StringToBytes("Discover"),getQualifiedAddress(),Protocol.DHCP));
     }
 
     @Override
     public void dhcpRequest(String sender) {
-        System.out.println("System "+getQualifiedAddress()+" asking "+sender+" for IP address.");
-        getParent().execute(new Message(sender, EncodingUtil.StringToBytes("Request"), getQualifiedAddress(), Protocol.DHCP));
+        System.out.println("[DCHP Client "+getName()+"] System "+getQualifiedAddress()+" asking "+sender+" for IP address.");
+        getParent().addMessage(new Message(sender, EncodingUtil.StringToBytes("Request"), getQualifiedAddress(), Protocol.DHCP));
     }
 
     @Override
@@ -61,13 +61,13 @@ public class DhcpClientAgent extends NetworkableAgent implements DhcpClient {
         }
         switch (msg.toLowerCase()){
             case "offer":
-                System.out.println("Receieved server offer from "+message.getSender());
+                System.out.println("[DCHP Client "+getName()+"] Receieved server offer from "+message.getSender());
                 dhcpRequest(message.getSender());
                 break;
             case "acknowledge":
                 String ip = in[1];
-                System.out.println("System "+getQualifiedAddress()+" aknowledged IP "+ip+" from "+message.getSender());
                 setIpAddress(ip);
+                System.out.println("[DCHP Client "+getName()+"] System "+getQualifiedAddress()+" aknowledged IP "+ip+" from "+message.getSender());
         }
     }
 }

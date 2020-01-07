@@ -12,15 +12,16 @@ import agents.Protocol;
 import agents.impl.misc.LogMetaAgent;
 import agents.util.EncodingUtil;
 import java.util.EnumSet;
+import agents.main.Showcase;
 
 /**
  * Main method to show feature of sockets on localhost.
  * @author Aidan
  */
-public class SocketMain {
+public class SocketMain implements Showcase {
     
-    
-    public static void main(String[] args) {
+    @Override
+    public void run() {
     
         // Setup the port
         int port = 25565;
@@ -32,23 +33,23 @@ public class SocketMain {
         Portal portalA = new Portal(20, "Portal A"); 
         SocketAgent clientA = new SocketClient(20, "Client A", portalA, port);
         LogMetaAgent agentA = new LogMetaAgent(10, "Agent A", portalA);
-        portalA.addAgent(agentA);
-        portalA.addAgent(clientA);
+        portalA.addChild(agentA);
+        portalA.addChild(clientA);
 
 
         // Create a mini network called network B.
         Portal portalB = new Portal(20, "Portal B"); 
         SocketAgent clientB = new SocketClient(20, "Client B", portalB, port);
         LogMetaAgent agentB = new LogMetaAgent(10, "Agent B", portalB);
-        portalB.addAgent(agentB);
-        portalB.addAgent(clientB);
+        portalB.addChild(agentB);
+        portalB.addChild(clientB);
         
 
         // Let the server know of our two socket clients.
         Message clientAIdent = new Message("Server", null, "Client A", Protocol.IDENT);
         Message clientBIdent = new Message("Server", null, "Client B", Protocol.IDENT);
-        clientA.execute(clientAIdent);
-        clientB.execute(clientBIdent);
+        clientA.addMessage(clientAIdent);
+        clientB.addMessage(clientBIdent);
         
         // Tell Client A to send a mesage to client B from Agent A.
         Message message = new Message("Agent B",
@@ -67,6 +68,11 @@ public class SocketMain {
         // Send the message via Portal A
         portalA.execute(agentToClient);
         
+    }
+    
+    public static void main(String[] args) {
+        Showcase instance = new SocketMain();
+        instance.run();
     }
     
     

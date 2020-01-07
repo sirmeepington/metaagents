@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * A server-sided socket implementation that allows for transmitting 
@@ -45,11 +43,11 @@ public class SocketServer extends SocketAgent {
         try {
             connections = new ConcurrentHashMap<>();
             socket = new ServerSocket(getPort());
-            System.out.println("["+getName()+"] Bound and created socket on port "
-                    + getPort());
+            System.out.println("["+getName() 
+                    +"] Bound and created socket on port " + getPort());
         } catch (IOException ex){
-            System.err.println("["+getName()+"] Cannot bind Server Socket to port "
-                    + getPort());
+            System.err.println("["+getName()
+                    + "] Cannot bind Server Socket to port " + getPort());
             return;
         }
         while (isRunning()){
@@ -108,7 +106,8 @@ public class SocketServer extends SocketAgent {
      */
     protected final SocketHandler getHandler(String clientName){
         for(SocketConnection conn : connections.keySet()){
-            if (conn.getClientName() != null && conn.getClientName().equals(clientName))
+            if (conn.getClientName() != null 
+                    && conn.getClientName().equals(clientName))
                 return connections.get(conn);
         }
         return null;

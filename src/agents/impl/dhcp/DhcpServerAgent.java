@@ -49,19 +49,19 @@ public class DhcpServerAgent extends NetworkableAgent implements DhcpServer {
                     dhcpAcknowledge(message);
                     break;
                 default:
-                    getParent().execute(message);
+                    getParent().addMessage(message);
                     break;
             }
         } else {
-            getParent().execute(message);
+            getParent().addMessage(message);
         }
     }
 
     @Override
     public void dhcpOffer(Message message) {
             // Say we exist.
-        System.out.println("Received client discovery message from "+message.getSender()+" Offering...");
-        execute(new Message(message.getSender(), EncodingUtil.StringToBytes("Offer"), getQualifiedAddress(),Protocol.DHCP));
+        System.out.println("[DCHP Server "+getName()+"] Received client discovery message from "+message.getSender()+" Offering...");
+        addMessage(new Message(message.getSender(), EncodingUtil.StringToBytes("Offer"), getQualifiedAddress(),Protocol.DHCP));
     }
 
     @Override
@@ -70,9 +70,9 @@ public class DhcpServerAgent extends NetworkableAgent implements DhcpServer {
         if (ip == null)
             return;
         
-        System.out.println("Acknowledging client request from "+message.getSender()+" sending IP "+ip);
+        System.out.println("[DCHP Server "+getName()+"] Acknowledging client request from "+message.getSender()+" sending IP "+ip);
         String sender = message.getSender(); // MAC address
-        execute(new Message(sender, EncodingUtil.StringToBytes("Acknowledge|"+ip),getQualifiedAddress(),Protocol.DHCP));
+        addMessage(new Message(sender, EncodingUtil.StringToBytes("Acknowledge|"+ip),getQualifiedAddress(),Protocol.DHCP));
     }
 
     /**

@@ -11,6 +11,11 @@ import java.util.concurrent.ArrayBlockingQueue;
  * Abstract MetaAgent class that implements a receiving and parsing behaviour 
  * for incoming message.
  * 
+ * In the terms of a message's lifetime within a MetaAgent; it should be added
+ * via {@link #addMessage(agents.Message)} which adds it to the queue; where it
+ * is taken via the thread and {@link #parse(agents.Message)}d. If parsing 
+ * passes the message is {@link #execute(agents.Message)}d.
+ * 
  * @see Message
  * @author v8076743
  */
@@ -53,6 +58,7 @@ public abstract class MetaAgent {
      */
     private volatile boolean running = true;
     
+
     public MetaAgent(int capacity, String name, Portal parent) {
         this.queue = new ArrayBlockingQueue<>(capacity);
         this.parent = parent;
@@ -113,10 +119,20 @@ public abstract class MetaAgent {
     }
     
     /**
+     * Adds a message to this agent's queue. 
+     * Use this over {@link #parse(agents.Message) } to respect the MetaAgents
+     * queue.
+     * @param message 
+     */
+    public void addMessage(Message message){
+        getQueue().add(message);
+    }
+    
+    /**
      * Executes the behaviour of this agent for the respective message.
      * @param message The message to execute the behaviour of.
      */
-    public abstract void execute(Message message);
+    protected abstract void execute(Message message);
     
     /**
      * Whether or not the MetaAgent can receive and parse the message passed.

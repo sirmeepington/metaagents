@@ -5,7 +5,7 @@
  */
 package agents;
 
-import java.util.ArrayList;
+import agents.util.EncodingUtil;
 import java.util.TreeMap;
 
 /**
@@ -21,16 +21,20 @@ public class Portal extends MetaAgent {
     /**
      * The sub-agents of this portal.
      */
-    private final TreeMap<String,MetaAgent> agents;
+    private final TreeMap<String,String> agents;
+    
+    private final TreeMap<String,MetaAgent> immediateChildren;
     
     public Portal(int capacity, String name) {
         super(capacity, name, null);
         agents = new TreeMap<>();
+        immediateChildren = new TreeMap<>();
     }
     
     public Portal(int capacity, String name, Portal parent){
         super(capacity, name, parent);
         agents = new TreeMap<>();
+        immediateChildren = new TreeMap<>();
     }
     
     /**
@@ -55,22 +59,44 @@ public class Portal extends MetaAgent {
         
         if (!message.bounce())
             return;
+        
+        handleMessage(message);
+        
         if (message.getRecipient().equals(Wildcard.ALL.toString())){
-            agents.forEach((s,a) -> a.parse(message));
+            immediateChildren.forEach((s,agent) -> agent.addMessage(message));
             return;
         }
         
-        executeOnSubAgent(message);
+        // Find recipient.
+        executeOnSubAgent(message.getRecipient(), message);
     }
     
-    protected void executeOnSubAgent(Message message){
-        MetaAgent receive = getSubAgent(message.getRecipient());
+    private void handleMessage(Message message){
+        if (message instanceof SystemMessage){
+            // System message.
+            SystemMessage msg = (SystemMessage) message;
+            if (msg.getAction() == SystemAction.REGISTER_AGENT){
+                String newAgentName = EncodingUtil.BytesToString(msg.getData());
+                if (!agents.containsKey(newAgentName) && !immediateChildren.containsKey(newAgentName)){
+                System.out.println("["+getName()+"] Received REGISTER AGENT message for new agent "
+                        + newAgentName+" to be registered as "+message.getSender());
+                    agents.put(newAgentName, message.getSender());
+                }
+                msg.setSender(getName());
+                if (getParent() != null)
+                    getParent().addMessage(msg);
+            }
+        }
+    }
+    
+    protected void executeOnSubAgent(String name, Message message){
+        MetaAgent receive = getSubAgent(name);
         if (receive == null)
         {
-            System.err.println("Invalid receiptant: "+message.getRecipient());
+//            System.err.println("["+getName()+"] Invalid recipient: "+name+" ("+message+")");
             return;
         }
-        receive.parse(message);
+        receive.addMessage(message);
     }
     
     /**
@@ -78,17 +104,29 @@ public class Portal extends MetaAgent {
      * @param name The name of the MetaAgent.
      * @return The MetaAgent to retrieve from its name.
      */
+//    protected MetaAgent getSubAgent(String name){
+//        for(MetaAgent agent : agents.values()){
+//            if (agent instanceof Portal){
+//                MetaAgent subagent = ((Portal) agent).getSubAgent(name);
+//                if (subagent != null)
+//                    return subagent;
+//            }
+//            else if (agent.getName().equals(name)){
+//                    return agent;
+//            }
+//        }
+//        return null;
+//    }
+    
     protected MetaAgent getSubAgent(String name){
-        for(MetaAgent agent : agents.values()){
-            if (agent instanceof Portal){
-                MetaAgent subagent = ((Portal) agent).getSubAgent(name);
-                if (subagent != null)
-                    return subagent;
-            }
-            else if (agent.getName().equals(name)){
-                    return agent;
-            }
-        }
+        
+        if (immediateChildren.containsKey(name))
+            return immediateChildren.get(name);
+        
+        if (agents.containsKey(name))
+            if (immediateChildren.containsKey(agents.get(name)))
+                return immediateChildren.get(agents.get(name));
+        
         return null;
     }
 
@@ -96,11 +134,21 @@ public class Portal extends MetaAgent {
      * Adds a Meta-Agent to the tree of children on this Portal.
      * If a Meta-Agent of the same name already is contained in this portal
      * then it is not added.
-     * @param a The MetaAgent to add.
+     * @param agent The MetaAgent to add.
      */
-    public void addAgent(MetaAgent a){
-        if (!agents.containsKey(a.getName())){
-            agents.put(a.getName(), a);
+    public void addChild(MetaAgent agent){
+        if (!immediateChildren.containsKey(agent.getName())){
+            immediateChildren.put(agent.getName(), agent);
+            
+            if (getParent() != null){
+                addMessage(
+                        new SystemMessage(getParent().getName(),
+                                EncodingUtil.StringToBytes(agent.getName()),
+                                SystemAction.REGISTER_AGENT,
+                                getName()
+                        )
+                );
+            }
         }
     }
     
@@ -111,7 +159,7 @@ public class Portal extends MetaAgent {
      */
     @Override
     public void end(){
-        agents.forEach((s,a) -> a.end());
+//        agents.forEach((s,a) -> a.end());
         super.end();
     }
     
