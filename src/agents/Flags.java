@@ -59,7 +59,7 @@ public enum Flags {
         EnumSet flags = EnumSet.noneOf(Flags.class);
         for(Flags flag : Flags.values()){
             int fVal = flag.flagValue;
-            if ((fVal & val) == val){
+            if ((val & fVal) == fVal){
                 flags.add(flag);
             }
         }
