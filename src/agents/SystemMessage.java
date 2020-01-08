@@ -37,7 +37,8 @@ public class SystemMessage extends Message {
     
     /**
      * Returns the action that this System Message is providing to the agent.
-     * @return 
+     * @return The SystemAction.
+     * @see SystemAction
      */
     public SystemAction getAction(){
         return this.action;

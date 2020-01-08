@@ -122,7 +122,7 @@ public abstract class MetaAgent {
      * Adds a message to this agent's queue. 
      * Use this over {@link #parse(agents.Message) } to respect the MetaAgents
      * queue.
-     * @param message 
+     * @param message The message to add to the queue.
      */
     public void addMessage(Message message){
         getQueue().add(message);

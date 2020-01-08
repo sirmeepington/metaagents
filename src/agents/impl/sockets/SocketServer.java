@@ -85,11 +85,11 @@ public class SocketServer extends SocketAgent {
     }
 
     /**
-     * Prevents SocketServers from 
-     * @param message 
+     * Prevents SocketServers from executing messages.
+     * @param message The message to execute (does nothing).
      */
     @Override
-    public void execute(Message message) {}
+    protected void execute(Message message) {}
     
     /**
      * Gets the underlying {@link ServerSocket} from this server object.

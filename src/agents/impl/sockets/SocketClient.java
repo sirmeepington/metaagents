@@ -107,7 +107,7 @@ public class SocketClient extends SocketAgent {
      * @param message The message to send to the socket server.
      */
     @Override
-    public void execute(Message message) {
+    protected void execute(Message message) {
         getQueue().add(message);
     }
     

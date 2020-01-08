@@ -28,7 +28,7 @@ public class DhcpClientAgent extends NetworkableAgent implements DhcpClient {
      * @param message The incoming message.
      */
     @Override
-    public void execute(Message message){
+    protected void execute(Message message){
         if (canReceive(message))
             handleDhcp(message);
     }

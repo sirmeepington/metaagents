@@ -58,7 +58,7 @@ public class Portal extends MetaAgent {
      * @param message The message to pass on.
      */
     @Override
-    public void execute(Message message){
+    protected void execute(Message message){
         
         if (!message.bounce())
             return;

@@ -45,7 +45,7 @@ public class DhcpServerAgent extends NetworkableAgent implements DhcpServer {
      * @param message The message to execute on.
      */
     @Override
-    public void execute(Message message) {
+    protected void execute(Message message) {
         if (message == null) return;
         if (!canReceive(message)) {
             getParent().addMessage(message);
@@ -67,7 +67,9 @@ public class DhcpServerAgent extends NetworkableAgent implements DhcpServer {
     }
 
     /**
-     * {@inheritdoc}
+     * Concrete implementation of the DhcpServer interfaces method.
+     * @see DhcpServer#dhcpOffer(agents.Message) 
+     * @param message The message to offer.
      */
     @Override
     public void dhcpOffer(Message message) {
@@ -77,7 +79,9 @@ public class DhcpServerAgent extends NetworkableAgent implements DhcpServer {
     }
 
     /**
-     * {@inheritdoc}
+     * Concrete implementation of the DhcpServer interfaces method.
+     * @see DhcpServer#dhcpAcknowledge(agents.Message) 
+     * @param message The message to acknowledge.
      */
     @Override
     public void dhcpAcknowledge(Message message) {
