@@ -69,7 +69,7 @@ public class SocketClient extends SocketAgent {
             ObjectInputStream in = new ObjectInputStream(str);
             Message m = (Message)in.readObject();
             System.out.println("["+getName()+"] Received message "+m);
-            getParent().execute(m);
+            getParent().addMessage(m);
         } catch (IOException | ClassNotFoundException ex){
             System.err.println(ex.getMessage());
         } 
@@ -82,7 +82,8 @@ public class SocketClient extends SocketAgent {
             return;
         Message message = getQueue().remove();
         try {
-            if (message.getFlags().contains(Flags.WRAPPED) && message.getSender().equals(getName())){
+            if (message.getFlags().contains(Flags.WRAPPED) 
+                    && message.getSender().equals(getName())){
                 message = (Message)EncodingUtil.BytesToObj(message.getData());
             }
             System.out.println("["+getName()+"] Sending message (" +
@@ -106,7 +107,7 @@ public class SocketClient extends SocketAgent {
      * @param message The message to send to the socket server.
      */
     @Override
-    public void execute(Message message) {
+    protected void execute(Message message) {
         getQueue().add(message);
     }
     

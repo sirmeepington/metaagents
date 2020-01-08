@@ -84,7 +84,4 @@ public class SocketConnection {
         }
         return true;
     }
-    
-    
-    
 }

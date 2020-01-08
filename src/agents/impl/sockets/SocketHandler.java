@@ -119,18 +119,23 @@ public class SocketHandler extends Thread {
                 && !message.getFlags().contains(Flags.INTERNAL)) {
             SocketHandler handler = server.getHandler(message.getRecipient());
             if (handler == null) {
-                System.out.println("["+getName()+"] I can't find the recipient. Have they identified?");
+                System.out.println("["+getName() 
+                        +"] I can't find the recipient. Have they identified?");
                 return;
             }
-            System.out.println("["+getName()+"] Found SocketConnection for " + message.getRecipient() + ": " + handler.getName());
+            System.out.println("["+getName()+"] Found SocketConnection for " 
+                    + message.getRecipient() + ": " + handler.getName());
             handler.add(message);
         } else {
             try {
-                ObjectOutputStream out = new ObjectOutputStream(connection.getConnection().getOutputStream());
+                ObjectOutputStream out = new ObjectOutputStream(
+                        connection.getConnection().getOutputStream());
                 out.writeObject(message);
-                System.out.println("["+getName()+"] Wrote message " + message + " to my client.");
+                System.out.println("["+getName()+"] Wrote message " + message
+                        + " to my client.");
             } catch (IOException ex) {
-                System.err.println("["+getName()+"] Exception writing to socket: "+ex.getMessage());
+                System.err.println("["+getName() 
+                        + "] Exception writing to socket: "+ex.getMessage());
             }
         }
     }

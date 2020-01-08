@@ -22,8 +22,12 @@ public class LogMetaAgent extends MetaAgent {
         super(capacity, name, parent);
     }
 
+    /**
+     * Logs the received message into the standard system output.
+     * @param message The message to output.
+     */
     @Override
-    public void execute(Message message) {
+    protected void execute(Message message) {
         System.out.println(message+" received by "+getName());
     }
     
