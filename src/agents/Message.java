@@ -156,7 +156,11 @@ public class Message implements Serializable {
     public String toString() {
         if (data == null || recipient == null)
             return "Message with null data / recipient";
-        return "\""+new String(data,StandardCharsets.UTF_8)+"\" for "+recipient;
+        return "Message: "
+                + "[DATA: \""+new String(data,StandardCharsets.UTF_8)+"\"] "
+                + "[RECIPIENT: "+recipient+"] "
+                + "[SENDER: "+sender+"] "
+                + "[BOUNCES: "+bounces+"]";
     }
     
     /**
@@ -214,4 +218,11 @@ public class Message implements Serializable {
         return true;
     }
     
+    /**
+     * Checks the remaining bounces of the message.
+     * @return The remaining bounces
+     */
+    public int bounces(){
+        return this.bounces;
+    }
 }

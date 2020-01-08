@@ -63,14 +63,13 @@ public class Portal extends MetaAgent {
         if (!message.bounce())
             return;
         
-        handleMessage(message);
-        
         if (message.getRecipient().equals(Wildcard.ALL.toString())){
-            immediateChildren.forEach((s,agent) -> agent.addMessage(message));
+            getChildren().forEach((s,agent) -> executeOnSubAgent(s,message));
             return;
         }
         
         // Find recipient.
+        handleMessage(message);
         executeOnSubAgent(message.getRecipient(), message);
     }
     
@@ -79,20 +78,25 @@ public class Portal extends MetaAgent {
      * handling system messages.
      * @param message The message to parse and handle the specifics of.
      */
-    private void handleMessage(Message message){
+    protected void handleMessage(Message message){
         if (message instanceof SystemMessage){
             // System message.
             SystemMessage msg = (SystemMessage) message;
             if (msg.getAction() == SystemAction.REGISTER_AGENT){
                 String newAgentName = EncodingUtil.BytesToString(msg.getData());
-                if (!agents.containsKey(newAgentName) && !immediateChildren.containsKey(newAgentName)){
-                System.out.println("["+getName()+"] Received REGISTER AGENT message for new agent "
-                        + newAgentName+" to be registered as "+message.getSender());
-                    agents.put(newAgentName, message.getSender());
+                if (!agents.containsKey(newAgentName)
+                        && !getChildren().containsKey(newAgentName) 
+                        && (getParent() == null ? true : !getParent().getName().equals(newAgentName))
+                        && !newAgentName.equals(message.getSender())){
+//                    System.out.println("["+getName()+"] Received REGISTER AGENT message for new agent "
+//                           + newAgentName+" to be registered as "+message.getSender());
+                        agents.put(newAgentName, message.getSender());
+
+                    msg.setSender(getName());
                 }
-                msg.setSender(getName());
-                if (getParent() != null)
+                if (getParent() != null && !getParent().agents.containsKey(newAgentName)){
                     getParent().addMessage(msg);
+                }
             }
         }
     }
@@ -105,12 +109,19 @@ public class Portal extends MetaAgent {
      * @param message The message to send to the sub-agent.
      */
     protected void executeOnSubAgent(String name, Message message){
+        if (name.equals(getName()))
+            return;
         MetaAgent receive = getSubAgent(name);
         if (receive == null)
         {
-//            System.err.println("["+getName()+"] Invalid recipient: "+name+" ("+message+")");
-            return;
+            if (getParent() != null && name.equals(getParent().getName())){
+                receive = getParent();
+            } else {
+                //System.err.println("["+getName()+"] Received message for unknown recipient: "+name+": "+message);
+                return;
+            }
         }
+        //System.out.println("["+getName()+"] Forwarded message ("+message+") to "+receive);
         receive.addMessage(message);
     }
     
@@ -121,7 +132,6 @@ public class Portal extends MetaAgent {
      * @return The MetaAgent or next portal which leads to the target.
      */
     protected MetaAgent getSubAgent(String name){
-        
         if (immediateChildren.containsKey(name))
             return immediateChildren.get(name);
         
@@ -153,6 +163,10 @@ public class Portal extends MetaAgent {
                 );
             }
         }
+    }
+    
+    protected TreeMap<String,MetaAgent> getChildren(){
+        return immediateChildren;
     }
     
     /**

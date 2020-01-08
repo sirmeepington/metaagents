@@ -52,6 +52,9 @@ public class SystemMessage extends Message {
         this.action = action;
     }
 
-    
+    @Override
+    public String toString() {
+        return "System Message: [ACTION: "+getAction()+"] "+super.toString(); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
