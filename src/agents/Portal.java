@@ -19,10 +19,13 @@ import java.util.TreeMap;
 public class Portal extends MetaAgent {
     
     /**
-     * The sub-agents of this portal.
+     * The routing table for all known agents to this Portal.
      */
     private final TreeMap<String,String> agents;
     
+    /**
+     * All known immediate children to this Portal.
+     */
     private final TreeMap<String,MetaAgent> immediateChildren;
     
     public Portal(int capacity, String name) {
@@ -71,6 +74,11 @@ public class Portal extends MetaAgent {
         executeOnSubAgent(message.getRecipient(), message);
     }
     
+    /**
+     * Handles the message; running any specific code for the message, e.g.
+     * handling system messages.
+     * @param message The message to parse and handle the specifics of.
+     */
     private void handleMessage(Message message){
         if (message instanceof SystemMessage){
             // System message.
@@ -89,6 +97,13 @@ public class Portal extends MetaAgent {
         }
     }
     
+    /**
+     * Runs the message on the sub-agent to this portal with the specified name;
+     * this is done by choosing the next portal or sub-agent via the routing
+     * table {@link #agents}.
+     * @param name The name of the target sub-agent to send the message to.
+     * @param message The message to send to the sub-agent.
+     */
     protected void executeOnSubAgent(String name, Message message){
         MetaAgent receive = getSubAgent(name);
         if (receive == null)
@@ -100,24 +115,11 @@ public class Portal extends MetaAgent {
     }
     
     /**
-     * Gets the child MetaAgent of the Portal from the input name {@code name}.
-     * @param name The name of the MetaAgent.
-     * @return The MetaAgent to retrieve from its name.
+     * Retrieves a sub-agent via the routing table and the list of immediate 
+     * children to find the client which best suits the name given.
+     * @param name The name of the agent to find.
+     * @return The MetaAgent or next portal which leads to the target.
      */
-//    protected MetaAgent getSubAgent(String name){
-//        for(MetaAgent agent : agents.values()){
-//            if (agent instanceof Portal){
-//                MetaAgent subagent = ((Portal) agent).getSubAgent(name);
-//                if (subagent != null)
-//                    return subagent;
-//            }
-//            else if (agent.getName().equals(name)){
-//                    return agent;
-//            }
-//        }
-//        return null;
-//    }
-    
     protected MetaAgent getSubAgent(String name){
         
         if (immediateChildren.containsKey(name))
@@ -131,10 +133,11 @@ public class Portal extends MetaAgent {
     }
 
     /**
-     * Adds a Meta-Agent to the tree of children on this Portal.
-     * If a Meta-Agent of the same name already is contained in this portal
-     * then it is not added.
-     * @param agent The MetaAgent to add.
+     * Adds a Meta Agent as a direct child to the portal. 
+     * This is added into a list of direct children. If a new child is added and
+     * there is a portal above this one; a System message is broadcasted outward
+     * to update the routing tables to apply the addition of this agent.
+     * @param agent The MetaAgent to add as a child of this portal.
      */
     public void addChild(MetaAgent agent){
         if (!immediateChildren.containsKey(agent.getName())){
@@ -153,13 +156,11 @@ public class Portal extends MetaAgent {
     }
     
     /**
-     * Sends the command to end for all children of the portal and then ends
-     * this portal.
+     * Sends the command to end this portal.
      * @see MetaAgent#end() 
      */
     @Override
     public void end(){
-//        agents.forEach((s,a) -> a.end());
         super.end();
     }
     

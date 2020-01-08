@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package agents;
+package agents.impl.dhcp;
 
+import agents.Message;
+import agents.Portal;
+import agents.SystemAgent;
 import java.util.Random;
 
 /**
@@ -93,6 +96,12 @@ public abstract class NetworkableAgent extends SystemAgent {
         setMacAddress(sb.toString());
     }
     
+    /**
+     * Calls the super version of this method to check if this agent can receive
+     * or checks if the qualified address matches the message's recipient.
+     * @param message The message that we to check if we can receive it.
+     * @return True if we can receive the message; false otherwise.
+     */
     @Override
     protected boolean canReceive(Message message) {
         return super.canReceive(message) || message.getRecipient().equals(getQualifiedAddress());

@@ -69,7 +69,7 @@ public class SocketClient extends SocketAgent {
             ObjectInputStream in = new ObjectInputStream(str);
             Message m = (Message)in.readObject();
             System.out.println("["+getName()+"] Received message "+m);
-            getParent().execute(m);
+            getParent().addMessage(m);
         } catch (IOException | ClassNotFoundException ex){
             System.err.println(ex.getMessage());
         } 

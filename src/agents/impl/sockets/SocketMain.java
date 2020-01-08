@@ -16,6 +16,7 @@ import agents.main.Showcase;
 
 /**
  * Main method to show feature of sockets on localhost.
+ * This class is a showcase class for the Socket implementation.
  * @author Aidan
  */
 public class SocketMain implements Showcase {
@@ -24,10 +25,10 @@ public class SocketMain implements Showcase {
     public void run() {
     
         // Setup the port
-        int port = 25565;
+        final int port = 25565;
         
         // Initialise the server
-        SocketAgent server = new SocketServer(20, "Server", port);
+        final SocketAgent server = new SocketServer(20, "Server", port);
         
         // Create a mini network called network A.
         Portal portalA = new Portal(20, "Portal A"); 
@@ -66,7 +67,7 @@ public class SocketMain implements Showcase {
         agentToClient.setFlags(EnumSet.of(Flags.INTERNAL, Flags.WRAPPED));
         
         // Send the message via Portal A
-        portalA.execute(agentToClient);
+        portalA.addMessage(agentToClient);
         
     }
     

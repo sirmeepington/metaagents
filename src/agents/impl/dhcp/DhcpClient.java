@@ -11,7 +11,7 @@ import agents.Message;
  * Interface implementation of the DHCP protocol's methods for a client.
  * The client is responsible for starting the DHCP process by broadcasting
  * their discovery intent.
- * @author v8076743
+ * @author Aidan
  */
 public interface DhcpClient {
     

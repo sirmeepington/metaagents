@@ -7,7 +7,6 @@ package agents.impl.dhcp;
 
 import agents.util.EncodingUtil;
 import agents.Message;
-import agents.NetworkableAgent;
 import agents.Portal;
 import agents.Protocol;
 import agents.Wildcard;
@@ -30,22 +29,42 @@ public class DhcpClientAgent extends NetworkableAgent implements DhcpClient {
      */
     @Override
     public void execute(Message message){
-        if (canReceive(message) && message.getProtocol() == Protocol.DHCP)
+        if (canReceive(message))
             handleDhcp(message);
     }
-
+    
+    /**
+     * Checks whether the message is using the DHCP protocol and can be received
+     * via the traditional way.
+     * @param message The message to check.
+     * @return True if the message is using the DHCP protocol; false otherwise.
+     */
+    @Override
+    public boolean canReceive(Message message){
+        return super.canReceive(message) && message.getProtocol() == Protocol.DHCP;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void dhcpDiscover() {
         System.out.println("\n"+"[DCHP Client "+getName()+"] System "+getQualifiedAddress()+" broadcasting discovery inent for DHCP.");
         getParent().addMessage(new Message(Wildcard.ALL,EncodingUtil.StringToBytes("Discover"),getQualifiedAddress(),Protocol.DHCP));
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void dhcpRequest(String sender) {
         System.out.println("[DCHP Client "+getName()+"] System "+getQualifiedAddress()+" asking "+sender+" for IP address.");
         getParent().addMessage(new Message(sender, EncodingUtil.StringToBytes("Request"), getQualifiedAddress(), Protocol.DHCP));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void handleDhcp(Message message) {
         if (message == null || message.getProtocol() != Protocol.DHCP)

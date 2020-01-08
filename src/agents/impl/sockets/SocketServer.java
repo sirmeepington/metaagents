@@ -84,6 +84,10 @@ public class SocketServer extends SocketAgent {
         return false;
     }
 
+    /**
+     * Prevents SocketServers from 
+     * @param message 
+     */
     @Override
     public void execute(Message message) {}
     

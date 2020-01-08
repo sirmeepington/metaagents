@@ -9,16 +9,23 @@ import agents.Portal;
 import agents.main.Showcase;
 
 /**
- * Main class for demonstrating and testing the behaviour of the MAS.
- * @author v8076743
+ * A showcase class to demonstrate the DHCP protocol implementation via 
+ * MetaAgents.
+ * @author Aidan
  */
 public class DhcpAgents implements Showcase {
 
+    /**
+     * Begins the DHCP demonstration
+     * @see agents.main.MainClass
+     */
     @Override
     public void run() {
         
+        // Initialise the portal to route messages through.
         Portal router = new Portal(100, "192.168.1.1");
         
+        // Create client agents.
         DhcpClientAgent a1 = new DhcpClientAgent(10, router);
         DhcpClientAgent a2 = new DhcpClientAgent(10, router);
         DhcpClientAgent a3 = new DhcpClientAgent(10, router);
@@ -28,8 +35,11 @@ public class DhcpAgents implements Showcase {
         DhcpClientAgent a7 = new DhcpClientAgent(10, router);
         DhcpClientAgent a8 = new DhcpClientAgent(10, router);
         DhcpClientAgent a9 = new DhcpClientAgent(10, router);
+        
+        // Create a server agent.
         DhcpServerAgent s1 = new DhcpServerAgent(10, router);
 
+        // Add them as direct children to the router.
         router.addChild(a1);
         router.addChild(s1);
         router.addChild(a2);
@@ -41,6 +51,7 @@ public class DhcpAgents implements Showcase {
         router.addChild(a8);
         router.addChild(a9);
         
+        // Begin DHCP via Discover. 
         a1.dhcpDiscover();
         a2.dhcpDiscover();
         a3.dhcpDiscover();

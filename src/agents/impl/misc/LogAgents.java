@@ -12,11 +12,13 @@ import agents.main.Showcase;
 import agents.util.EncodingUtil;
 
 /**
- *
+ * A demonstration of the generic portal to client transfer with intermediary 
+ * portals.
  * @author Aidan
  */
 public class LogAgents implements Showcase {
     
+    @Override
     public void run() {
         
         

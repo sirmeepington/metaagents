@@ -7,7 +7,6 @@ package agents.impl.dhcp;
 
 import agents.util.EncodingUtil;
 import agents.Message;
-import agents.NetworkableAgent;
 import agents.Portal;
 import agents.Protocol;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -34,29 +33,42 @@ public class DhcpServerAgent extends NetworkableAgent implements DhcpServer {
         }
         ipAddress = "192.168.1.2";
     }
+    
+    @Override
+    public boolean canReceive(Message message){
+        return super.canReceive(message) && message.getProtocol() == Protocol.DHCP;
+    }
 
+    /**
+     * Checks if the message can be received and if the message contains the
+     * appropriate message for DHCP is is transferred tho the respective method.
+     * @param message The message to execute on.
+     */
     @Override
     public void execute(Message message) {
-        if (message == null)
-            return;
-        if (message.getProtocol() == Protocol.DHCP){
-            String m = EncodingUtil.BytesToString(message.getData()).toLowerCase();
-            switch (m){
-                case "discover":
-                    dhcpOffer(message);
-                    break;
-                case "request":
-                    dhcpAcknowledge(message);
-                    break;
-                default:
-                    getParent().addMessage(message);
-                    break;
-            }
-        } else {
+        if (message == null) return;
+        if (!canReceive(message)) {
             getParent().addMessage(message);
+            return;
+        }
+        
+        String m = EncodingUtil.BytesToString(message.getData()).toLowerCase();
+        switch (m){
+            case "discover":
+                dhcpOffer(message);
+                break;
+            case "request":
+                dhcpAcknowledge(message);
+                break;
+            default:
+                getParent().addMessage(message);
+                break;
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     @Override
     public void dhcpOffer(Message message) {
             // Say we exist.
@@ -64,6 +76,9 @@ public class DhcpServerAgent extends NetworkableAgent implements DhcpServer {
         addMessage(new Message(message.getSender(), EncodingUtil.StringToBytes("Offer"), getQualifiedAddress(),Protocol.DHCP));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     @Override
     public void dhcpAcknowledge(Message message) {
         String ip = ips.poll();
@@ -82,10 +97,5 @@ public class DhcpServerAgent extends NetworkableAgent implements DhcpServer {
      */
     @Override
     public void setIpAddress(String ipAddress) { }
-
-    @Override
-    public String getQualifiedAddress() {
-        return getIpAddress() == null ? getMacAddress() : getIpAddress();
-    }
     
 }
