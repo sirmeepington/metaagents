@@ -14,7 +14,7 @@ import java.util.TreeMap;
  * The portal is required to receive messages and redirect them to the 
  * applicable children via the {@link MetaAgent#canReceive(agents.Message)}
  * method that more concrete implementations of the class have overridden.
- * @author v8076743
+ * @author Aidan
  */
 public class Portal extends MetaAgent {
     
@@ -165,17 +165,14 @@ public class Portal extends MetaAgent {
         }
     }
     
+    /**
+     * Returns the map of immediate children for this Portal.
+     * Changes to the values in this map may have adverse effects to how 
+     * routing performs.
+     * @return The map of children.
+     */
     protected TreeMap<String,MetaAgent> getChildren(){
         return immediateChildren;
-    }
-    
-    /**
-     * Sends the command to end this portal.
-     * @see MetaAgent#end() 
-     */
-    @Override
-    public void end(){
-        super.end();
     }
     
 }

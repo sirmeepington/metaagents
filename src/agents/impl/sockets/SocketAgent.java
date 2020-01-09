@@ -15,7 +15,7 @@ import agents.Portal;
 public abstract class SocketAgent extends MetaAgent {
     
     /**
-     * The server port.
+     * The server port to connect to / host on.
      */
     private final int port;
     
@@ -25,7 +25,7 @@ public abstract class SocketAgent extends MetaAgent {
     }   
     
     /**
-     * Returns the port that the SocketAgent is using.
+     * Returns the port that the SocketAgent is using to connect or host on.
      * @return The port.
      */
     public int getPort(){

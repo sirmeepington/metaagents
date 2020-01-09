@@ -15,7 +15,7 @@ import agents.Message;
  * discovery intent; it also acknowledges a request for an IP address via its
  * {@link #dhcpAcknowledge(agents.Message)} method, which sends the IP address
  * within the message.
- * @author v8076743
+ * @author Aidan
  */
 public interface DhcpServer {
     

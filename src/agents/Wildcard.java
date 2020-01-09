@@ -9,7 +9,7 @@ package agents;
  * A Wildcard operator is used to easily distinguish unique recipients for 
  * Messages in the case where it is required.
  * @see Message
- * @author v8076743
+ * @author Aidan
  */
 public enum Wildcard {
     

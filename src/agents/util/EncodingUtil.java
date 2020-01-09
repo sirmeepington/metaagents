@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -44,6 +45,13 @@ public class EncodingUtil {
          return new String(in,StandardCharsets.UTF_8);
     }
     
+    /**
+     * Serialises an object to a byte array and returns it.
+     * If the object does not implement {@link Serializable} or if serialisation
+     * fails then {@code null} is returned.
+     * @param in The object to serialise to bytes.
+     * @return The serialised byte array of the object.
+     */
     public static byte[] ObjToBytes(Object in){
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -56,6 +64,13 @@ public class EncodingUtil {
         }
     }
     
+    /**
+     * De-serialises an object from a byte array to an Object.
+     * This method will return {@code null} if de-serialisation fails.
+     * @param in The byte array to de-serialise.
+     * @return The resulting object; or {@code null} if the objects class cannot
+     * be found or if reading fails.
+     */
     public static Object BytesToObj(byte[] in){
         try {
             ByteArrayInputStream baos = new ByteArrayInputStream(in);

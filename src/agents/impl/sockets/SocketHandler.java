@@ -24,7 +24,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 public class SocketHandler extends Thread {
 
     /**
-     * The {@link SocketConnection}.
+     * The {@link SocketConnection} that is associated with this handler.
      */
     private final SocketConnection connection;
     
@@ -53,8 +53,8 @@ public class SocketHandler extends Thread {
     }
 
     /**
-     * Takes available data from the socket and adds it to the parse queue if 
-     * it matches criteria.
+     * Takes available data from the socket and adds it to the 
+     * {@link #parseQueue} queue if it matches certain criteria.
      */
     private void take() {
         try {

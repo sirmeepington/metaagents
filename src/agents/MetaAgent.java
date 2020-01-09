@@ -17,7 +17,7 @@ import java.util.concurrent.ArrayBlockingQueue;
  * passes the message is {@link #execute(agents.Message)}d.
  * 
  * @see Message
- * @author v8076743
+ * @author Aidan
  */
 public abstract class MetaAgent {
     

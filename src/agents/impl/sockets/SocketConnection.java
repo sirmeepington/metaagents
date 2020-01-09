@@ -11,6 +11,7 @@ import java.util.Objects;
 /**
  * A connection to the SocketServer which contains the identifiable information
  * for the socket and the underlying connection itself.
+ * @see SocketServer
  * @author Aidan
  */
 public class SocketConnection {
@@ -57,13 +58,23 @@ public class SocketConnection {
         this.clientName = clientName;
     }
 
+    /**
+     * Calculates the hashCode for this object.
+     * Only the connection itself is used to calculate the hashCode.
+     * @return The objects hashCode.
+     */
     @Override
     public int hashCode() {
         // Does not calculate clientName as we want the only discerning factor
         // to be the underlying connection itself.
-        return super.hashCode() ^ connection.hashCode(); 
+        return Objects.hash(connection);
     }
 
+    /**
+     * Checks the equality of two SocketConnections.
+     * @param obj The other connection to check equality of.
+     * @return True if the Connections are equal; false otherwise.
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

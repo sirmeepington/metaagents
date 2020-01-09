@@ -19,11 +19,17 @@ import java.util.Random;
  * qualified address for the NetworkableAgent. 
  * @see #getQualifiedAddress() 
  * @see #getName() 
- * @author v8076743
+ * @author Aidan
  */
 public abstract class NetworkableAgent extends SystemAgent {
     
+    /**
+     * A string denoting the IPv4 address of this agent.
+     */
     protected String ipAddress;
+    /**
+     * A string denoting the 6-byte MAC address of this agent.
+     */
     protected String macAddress;
 
     public NetworkableAgent(int capacity, Portal parent) {
