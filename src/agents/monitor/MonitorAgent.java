@@ -31,7 +31,7 @@ public class MonitorAgent extends Portal {
      */
     @Override
     protected void executeOnSubAgent(String agent, Message message){
-        MetaAgent receive = getSubAgent(agent);
+        MetaAgent receive = getSubAgentOrParent(agent);
         if (receive == null)
         {
             return;

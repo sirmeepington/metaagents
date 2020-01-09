@@ -43,31 +43,20 @@ public class SocketServer extends SocketAgent {
         try {
             connections = new ConcurrentHashMap<>();
             socket = new ServerSocket(getPort());
-            System.out.println("["+getName() 
-                    +"] Bound and created socket on port " + getPort());
         } catch (IOException ex){
-            System.err.println("["+getName()
-                    + "] Cannot bind Server Socket to port " + getPort());
             return;
         }
         while (isRunning()){
             try {
                 Socket s = socket.accept();
                 if (containsSocket(s)){
-                    System.out.println("Not re-registering already existing"
-                            + "socket connection at "
-                            + s.getInetAddress()+":"+s.getPort());
                     continue;
                 }
                 SocketConnection conn = new SocketConnection(s);
                 SocketHandler thread = new SocketHandler(this,conn);
-                thread.setName("SocketHandler");
                 thread.start();
                 connections.put(conn, thread);
-                System.out.println("["+getName()+"] Created handler thread for "
-                        + s.getInetAddress()+":"+s.getPort());
-            } catch (IOException ex) {
-            }
+            } catch (IOException ex) { }
         }
     }
     

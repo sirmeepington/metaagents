@@ -55,39 +55,27 @@ public class Message implements Serializable {
      */
     private int bounces = 100;
 
-    public Message(String receiptant, byte[] data, String sender) {
-        this.recipient = receiptant;
-        this.data = data;
-        this.sender = sender;
-        this.protocol = Protocol.NONE;
-    }
-
-    public Message(String receiptant, byte[] data, String sender, Protocol protocol) {
-        this.recipient = receiptant;
+    public Message(String recipient, byte[] data, String sender, Protocol protocol) {
+        this.recipient = recipient;
         this.data = data;
         this.sender = sender;
         this.protocol = protocol;
     }
 
-    public Message(Wildcard reciptant, byte[] data, String sender){
-        this.recipient = reciptant.toString();
-        this.data = data;
-        this.sender = sender;
-        this.protocol = Protocol.NONE;
+    public Message(String recipient, byte[] data, String sender) {
+        this(recipient,data,sender,Protocol.NONE);
+    }
+
+    public Message(Wildcard recipient, byte[] data, String sender){
+        this(recipient.toString(),data,sender,Protocol.NONE);
     }
     
-    public Message(Wildcard reciptant, byte[] data, String sender, Protocol protocol){
-        this.recipient = reciptant.toString();
-        this.data = data;
-        this.sender = sender;
-        this.protocol = protocol;
+    public Message(Wildcard recipient, byte[] data, String sender, Protocol protocol){
+        this(recipient.toString(),data,sender,protocol);
     }
     
     public Message(MetaAgent recipient, byte[] data, String sender, Protocol protocol){
-        this.recipient = recipient.getName();
-        this.data = data;
-        this.sender = sender;
-        this.protocol = protocol;
+        this(recipient.getName(),data,sender,protocol);
     }
 
     /**
