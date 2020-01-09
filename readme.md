@@ -1,4 +1,4 @@
-# Meta Agents [![CI](https://github.com/sirmeepington/metaagents/workflows/Java%20CI/badge.svg)](https://github.com/sirmeepington/metaagents/actions?query=workflow%3A%22Java+CI%22)
+# Meta Agents [![CI](https://github.com/sirmeepington/metaagents/workflows/Java%20CI/badge.svg)](https://github.com/sirmeepington/metaagents/actions?query=workflow%3A%22Java+CI%22) [![CI](https://img.shields.io/badge/javadocs-available-brightgreen)](https://sirmeepington.github.io/metaagents/)
 
 An interconnected, multi-threaded, multi-agent system for the transferral of messages throughout a system/network.
 
