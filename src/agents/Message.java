@@ -12,7 +12,7 @@ import java.util.EnumSet;
 /**
  * A message object that is instantiated to send message back and forth
  * between MetaAgents.
- * @author v8076743
+ * @author Aidan
  */
 public class Message implements Serializable {
     

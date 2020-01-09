@@ -10,12 +10,15 @@ import java.util.EnumSet;
 /**
  * A flaggable enumeration example for Java where the {@link Message} flags are
  * specified using bit-shifted values and stored in the message via an integer.
+ * Behaviour in this class is similar to how the {@code System.Flags} attribute
+ * works on enumeration types in C# as well as the implementation of their 
+ * {@code HasFlag()} extension method.
  * @author Aidan
  */
 public enum Flags {
     
     /**
-     * No special behaviour to implement,
+     * No special behaviour to implement.
      */
     NONE(0),
     /**
@@ -29,7 +32,8 @@ public enum Flags {
      */
     INTERNAL(1<<2),
     /**
-     * This message's data contains another, wrapped, message.
+     * This message's data is a another message and this current message is to
+     * serve as a wrapper.
      */
     WRAPPED(1<<3);
     
@@ -38,7 +42,7 @@ public enum Flags {
      */
     private final int flagValue;
     
-    Flags(int value){
+    private Flags(int value){
         flagValue = value;
     }
     

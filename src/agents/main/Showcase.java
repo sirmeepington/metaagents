@@ -13,7 +13,7 @@ package agents.main;
 public interface Showcase {
     
     /**
-     * Runs the given implementation.
+     * Runs the given implementation showcase.
      */
     public void run();
     

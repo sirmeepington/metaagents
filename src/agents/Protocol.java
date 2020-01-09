@@ -6,7 +6,7 @@
 package agents;
 
 /**
- * The message protocol for specialisd implementations of the Meta-Agent system.
+ * The message protocol for specialised implementations of the Meta-Agent system.
  * An example would be the {@code DHCP} protocol that is defined in this class
  * as it tells the {@link agents.impl.dhcp.DhcpClient} and 
  * {@link agents.impl.dhcp.DhcpServer} that the message is directed towards them

@@ -14,7 +14,7 @@ import agents.Portal;
  * received.
  * The {@code execute} method of this implementation only outputs the string
  * representation of the method to standard output.
- * @author v8076743
+ * @author Aidan
  */
 public class LogMetaAgent extends MetaAgent {
 

@@ -23,9 +23,6 @@ public class DhcpServerAgent extends NetworkableAgent implements DhcpServer {
      */
     private final ArrayBlockingQueue<String> ips = new ArrayBlockingQueue<>(255);
     
-    // TODO: Write a way for the DHCP server to remember / manage what IP
-    // address belongs to what MAC address.
-    
     public DhcpServerAgent(int capacity, Portal parent) {
         super(capacity, parent);
         for (int i = 3; i < 255; i++){

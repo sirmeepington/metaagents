@@ -75,6 +75,11 @@ public class SocketClient extends SocketAgent {
         } 
     }
     
+    /**
+     * Gives a Message to the recipient on the other end of the socket.
+     * This wraps any Messages in another message whose protocol is marked as
+     * {@link Protocol#NET} and its flags include {@link Flags#WRAPPED}.
+     */
     private void give(){
         if (getQueue().isEmpty())
             return;
@@ -108,7 +113,7 @@ public class SocketClient extends SocketAgent {
      */
     @Override
     protected void execute(Message message) {
-        getQueue().add(message);
+        addMessage(message);
     }
     
 }

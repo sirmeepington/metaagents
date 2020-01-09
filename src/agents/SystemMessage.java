@@ -52,6 +52,12 @@ public class SystemMessage extends Message {
         this.action = action;
     }
 
+    /**
+     * Shows that the message is a system message as well as the action that it
+     * includes; then appends the results from a call to
+     * {@link Message#toString()}.
+     * @return The string representation of this SystemMessage.
+     */
     @Override
     public String toString() {
         return "System Message: [ACTION: "+getAction()+"] "+super.toString(); //To change body of generated methods, choose Tools | Templates.
