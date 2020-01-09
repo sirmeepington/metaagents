@@ -80,19 +80,11 @@ public class SocketConnection {
         if (this == obj) {
             return true;
         }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
         final SocketConnection other = (SocketConnection) obj;
-        if (!Objects.equals(this.clientName, other.clientName)) {
-            return false;
-        }
-        if (!Objects.equals(this.connection, other.connection)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.clientName, other.clientName) 
+                && Objects.equals(this.connection, other.connection);
     }
 }

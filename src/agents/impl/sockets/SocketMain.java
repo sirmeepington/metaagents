@@ -23,10 +23,8 @@ public class SocketMain implements Showcase {
     
     @Override
     public void run() {
-    
         // Setup the port
         final int port = 25565;
-        
         // Initialise the server
         final SocketAgent server = new SocketServer(20, "Server", port);
         
@@ -44,7 +42,6 @@ public class SocketMain implements Showcase {
         LogMetaAgent agentB = new LogMetaAgent(10, "Agent B", portalB);
         portalB.addChild(agentB);
         portalB.addChild(clientB);
-        
 
         // Let the server know of our two socket clients.
         Message clientAIdent = new Message("Server", null, "Client A", Protocol.IDENT);
@@ -61,7 +58,6 @@ public class SocketMain implements Showcase {
                 EncodingUtil.ObjToBytes(message), "Client A");
         clientToClient.setFlags(EnumSet.of(Flags.WRAPPED));
 
-        
         Message agentToClient = new Message("Client A",
             EncodingUtil.ObjToBytes(clientToClient), "Agent A");
         agentToClient.setFlags(EnumSet.of(Flags.INTERNAL, Flags.WRAPPED));

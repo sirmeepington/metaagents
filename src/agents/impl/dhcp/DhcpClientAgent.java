@@ -70,15 +70,15 @@ public class DhcpClientAgent extends NetworkableAgent implements DhcpClient {
         if (message == null || message.getProtocol() != Protocol.DHCP)
             return;
         
-        if (getIpAddress() != null && !getIpAddress().trim().equals(""))
+        if (getIpAddress() != null && !getIpAddress().equals(""))
             return; // IP has already been set. DHCP process is unnecessary.
         
         String msg = EncodingUtil.BytesToString(message.getData());
         String[] in = msg.split("\\|");
         if (msg.contains("|")){
-            msg = in[0];
+            msg = in[0].toLowerCase();
         }
-        switch (msg.toLowerCase()){
+        switch (msg){
             case "offer":
                 System.out.println("[DCHP Client "+getName()+"] Receieved server offer from "+message.getSender());
                 dhcpRequest(message.getSender());

@@ -24,15 +24,15 @@ public class MainClass {
     public static void main(String[] args) {
         
         if (args.length != 1){        
-            System.out.println("This application shows different implementations"
-                    + " of Meta Agents.");
-            System.out.println("To run a specific showcase use the argument "
-                    + "specified in the squre brackes ([example]).");
-            System.out.println("To run in NetBeans IDE; run any of the classes "
-                    + "referenced below.");
-            System.out.println("DHCP Protocol: DhcpAgents [dhcp]");
-            System.out.println("Generic Logging: LogAgents [generic]");
-            System.out.println("Sockets: SocketMain [sockets]");
+            System.out.println("This application shows different "
+                    + "implementations of Meta Agents. \n"
+                    + "To run a specific showcase use the argument specified in"
+                    + " the squre brackes ([example]). \n"
+                    + "To run in NetBeans IDE; run any of the classes referenced"
+                    + " below.\n"
+                    + "DHCP Protocol: DhcpAgents [dhcp]\n"
+                    + "Generic Logging: LogAgents [generic]\n"
+                    + "Sockets: SocketMain [sockets]");
             return;
         }
         
@@ -49,7 +49,6 @@ public class MainClass {
             case "sockets":
                 showcase = new SocketMain();
                 break;
-                
             default:
                 return;
         }

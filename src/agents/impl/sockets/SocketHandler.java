@@ -37,6 +37,7 @@ public class SocketHandler extends Thread {
     private final ArrayBlockingQueue<Message> parseQueue;
 
     public SocketHandler(SocketServer server, SocketConnection socket) {
+        setName("SocketHandler");
         this.server = server;
         this.connection = socket;
         messagesToSend = new ArrayBlockingQueue<>(25);
@@ -107,36 +108,23 @@ public class SocketHandler extends Thread {
         if (messagesToSend.isEmpty()) {
             return;
         }
-
-        // Do parsing.
         Message message = messagesToSend.remove();
-        System.out.println("["+getName()+"] Found message to send: " + message);
         if (message.getFlags().contains(Flags.WRAPPED)){
             message = (Message) EncodingUtil.BytesToObj(message.getData());
         }
-
         if (!message.getRecipient().equals(connection.getClientName()) 
                 && !message.getFlags().contains(Flags.INTERNAL)) {
             SocketHandler handler = server.getHandler(message.getRecipient());
             if (handler == null) {
-                System.out.println("["+getName() 
-                        +"] I can't find the recipient. Have they identified?");
                 return;
             }
-            System.out.println("["+getName()+"] Found SocketConnection for " 
-                    + message.getRecipient() + ": " + handler.getName());
             handler.add(message);
         } else {
             try {
                 ObjectOutputStream out = new ObjectOutputStream(
                         connection.getConnection().getOutputStream());
                 out.writeObject(message);
-                System.out.println("["+getName()+"] Wrote message " + message
-                        + " to my client.");
-            } catch (IOException ex) {
-                System.err.println("["+getName() 
-                        + "] Exception writing to socket: "+ex.getMessage());
-            }
+            } catch (IOException ex) { }
         }
     }
     

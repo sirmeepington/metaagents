@@ -83,22 +83,27 @@ public class Portal extends MetaAgent {
             // System message.
             SystemMessage msg = (SystemMessage) message;
             if (msg.getAction() == SystemAction.REGISTER_AGENT){
-                String newAgentName = EncodingUtil.BytesToString(msg.getData());
-                if (!agents.containsKey(newAgentName)
-                        && !getChildren().containsKey(newAgentName) 
-                        && (getParent() == null ? true : !getParent().getName().equals(newAgentName))
-                        && !newAgentName.equals(message.getSender())){
-//                    System.out.println("["+getName()+"] Received REGISTER AGENT message for new agent "
-//                           + newAgentName+" to be registered as "+message.getSender());
-                        agents.put(newAgentName, message.getSender());
-
-                    msg.setSender(getName());
-                }
-                if (getParent() != null && !getParent().agents.containsKey(newAgentName)){
-                    getParent().addMessage(msg);
-                }
+                handleRegisterAgent(msg);
             }
         }
+    }
+    
+    private void handleRegisterAgent(SystemMessage msg){
+        String newAgentName = EncodingUtil.BytesToString(msg.getData());
+        if (canRegister(newAgentName, msg)){
+            agents.put(newAgentName, msg.getSender());
+            msg.setSender(getName());
+        }
+        if (getParent() != null && !getParent().agents.containsKey(newAgentName)){
+            getParent().addMessage(msg);
+        }
+    }
+    
+    private boolean canRegister(String agentName, SystemMessage msg){
+        return !agents.containsKey(agentName)
+                && !getChildren().containsKey(agentName) 
+                && (getParent() == null ? true : !getParent().getName().equals(agentName))
+                && !agentName.equals(msg.getSender());
     }
     
     /**
@@ -111,27 +116,25 @@ public class Portal extends MetaAgent {
     protected void executeOnSubAgent(String name, Message message){
         if (name.equals(getName()))
             return;
-        MetaAgent receive = getSubAgent(name);
+        MetaAgent receive = getSubAgentOrParent(name);
         if (receive == null)
         {
-            if (getParent() != null && name.equals(getParent().getName())){
-                receive = getParent();
-            } else {
-                //System.err.println("["+getName()+"] Received message for unknown recipient: "+name+": "+message);
-                return;
-            }
+            return;
         }
-        //System.out.println("["+getName()+"] Forwarded message ("+message+") to "+receive);
         receive.addMessage(message);
     }
     
     /**
      * Retrieves a sub-agent via the routing table and the list of immediate 
      * children to find the client which best suits the name given.
+     * If the agent requested is the parent; it is returned instead.
      * @param name The name of the agent to find.
      * @return The MetaAgent or next portal which leads to the target.
      */
-    protected MetaAgent getSubAgent(String name){
+    protected MetaAgent getSubAgentOrParent(String name){
+        if (name.equals(getParent().getName()))
+            return getParent();
+        
         if (immediateChildren.containsKey(name))
             return immediateChildren.get(name);
         
