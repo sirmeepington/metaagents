@@ -1,6 +1,7 @@
 package agents;
 
 import agents.util.EncodingUtil;
+import java.util.ArrayList;
 import java.util.TreeMap;
 
 /**
@@ -84,12 +85,17 @@ public class Portal extends MetaAgent {
     }
     
     private void handleRegisterAgent(SystemMessage msg){
-        String newAgentName = EncodingUtil.BytesToString(msg.getData());
-        if (canRegister(newAgentName, msg)){
-            agents.put(newAgentName, msg.getSender());
+        ArrayList<String> agentPath = 
+                (ArrayList<String>)EncodingUtil.BytesToObj(msg.getData());
+        String firstAgent = agentPath.get(0);
+        if (canRegister(firstAgent, msg)){
+            agents.put(firstAgent, msg.getSender());
             msg.setSender(getName());
+            // Add current agent to the list and re-save.
+            agentPath.add(getName());
+            msg.setData(EncodingUtil.ObjToBytes(agentPath));
         }
-        if (getParent() != null && !getParent().agents.containsKey(newAgentName)){
+        if (getParent() != null && !getParent().agents.containsKey(firstAgent)){
             getParent().addMessage(msg);
         }
     }
@@ -127,7 +133,7 @@ public class Portal extends MetaAgent {
      * @return The MetaAgent or next portal which leads to the target.
      */
     protected MetaAgent getSubAgentOrParent(String name){
-        if (name.equals(getParent().getName()))
+        if (getParent() != null && name.equals(getParent().getName()))
             return getParent();
         
         if (immediateChildren.containsKey(name))
@@ -152,9 +158,12 @@ public class Portal extends MetaAgent {
             immediateChildren.put(agent.getName(), agent);
             
             if (getParent() != null){
+                ArrayList<String> agentList = new ArrayList<>();
+                agentList.add(agent.getName());
+                agentList.add(getName());
                 addMessage(
                         new SystemMessage(getParent().getName(),
-                                EncodingUtil.StringToBytes(agent.getName()),
+                                EncodingUtil.ObjToBytes(agentList),
                                 SystemAction.REGISTER_AGENT,
                                 getName()
                         )

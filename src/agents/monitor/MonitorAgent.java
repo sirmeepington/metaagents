@@ -33,8 +33,7 @@ public class MonitorAgent extends Portal {
         }
         
         // Intercept and log messages for to direct children.
-        if (getChildren().containsValue(receive))
-            log(receive,message);
+        log(receive,message);
         receive.addMessage(message);
     }
     
