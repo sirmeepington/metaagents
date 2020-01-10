@@ -1,5 +1,6 @@
 package agents;
 
+import agents.util.EncodingUtil;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.util.EnumSet;
@@ -128,6 +129,16 @@ public class Message implements Serializable {
     public void setData(byte[] data) {
         this.data = data;
     }
+    
+    private String getDataStr(){
+        if (data == null)
+            return "Null Data";
+        Object dataObj = EncodingUtil.BytesToObj(data);
+        if (dataObj != null){
+            return dataObj.toString();
+        }
+        return new String(data,StandardCharsets.UTF_8);
+    }
 
     /**
      * Attempts to decode the information in {@code data} to a string and return
@@ -139,8 +150,9 @@ public class Message implements Serializable {
     public String toString() {
         if (data == null || recipient == null)
             return "Message with null data / recipient";
+        
         return "Message: "
-                + "[DATA: \""+new String(data,StandardCharsets.UTF_8)+"\"] "
+                + "[DATA: \""+getDataStr()+"\"] "
                 + "[RECIPIENT: "+recipient+"] "
                 + "[SENDER: "+sender+"] "
                 + "[BOUNCES: "+bounces+"]";

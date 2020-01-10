@@ -16,9 +16,9 @@ public class MonitorMain implements Showcase {
     @Override
     public void run(){
         
-        Portal portalA = new Portal(10, "Portal A", null);
-        Portal portalB = new MonitorAgent(10, "Monitor B", portalA);
-        Portal portalC = new MonitorAgent(10, "Monitor C", portalB);
+        Portal portalA = new MonitorAgent(10, "Portal A", null);
+        Portal portalB = new Portal(10, "Portal B", portalA);
+        Portal portalC = new Portal(10, "Portal C", portalB);
         MetaAgent agentA = new LogMetaAgent(10, "Agent A", portalC);
         
         portalA.addChild(portalB);
