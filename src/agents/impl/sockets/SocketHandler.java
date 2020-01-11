@@ -87,7 +87,6 @@ public class SocketHandler extends Thread {
         if (message.getProtocol() == Protocol.IDENT) {
             server.identify(connection, message.getSender());
         }
-        
 
         if (!message.getRecipient().equals(server.getName())) {
             messagesToSend.add(message);
@@ -104,9 +103,8 @@ public class SocketHandler extends Thread {
             return;
         }
         Message message = messagesToSend.remove();
-        if (message.getFlags().contains(Flags.WRAPPED)){
-            message = (Message) EncodingUtil.BytesToObj(message.getData());
-        }
+        message = unwrap(message);
+        
         if (!message.getRecipient().equals(connection.getClientName()) 
                 && !message.getFlags().contains(Flags.INTERNAL)) {
             SocketHandler handler = server.getHandler(message.getRecipient());
@@ -121,6 +119,19 @@ public class SocketHandler extends Thread {
                 out.writeObject(message);
             } catch (IOException ex) { }
         }
+    }
+    
+    /**
+     * Checks if the message provided contains the {@link Flags#WRAPPED} value
+     * and unwraps it if it does.
+     * @param message The message to unwrap.
+     * @return Unwraps the message if it is wrapped.
+     */
+    private Message unwrap(Message message){
+        if (message.getFlags().contains(Flags.WRAPPED)){
+            message = (Message) EncodingUtil.BytesToObj(message.getData());
+        }
+        return message;
     }
     
     /**

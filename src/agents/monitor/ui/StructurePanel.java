@@ -47,8 +47,8 @@ public class StructurePanel extends JPanel{
     }
     
     /**
-     * Takes a stack of Strings from the frame and 
-     * @param path 
+     * Takes a stack of Strings from the frame and adds them to the Tree.
+     * @param path The stack of names which indicate a path from agent to root.
      */
     public void addPath(Stack<String> path){
         String root = path.pop();
