@@ -11,7 +11,7 @@ import java.lang.reflect.InvocationTargetException;
 import javax.swing.SwingUtilities;
 
 /**
- *
+ * UI Monitor for viewing the structuring of a meta-agent system.
  * @author Aidan
  */
 public class MonitorMain implements Showcase {
@@ -29,15 +29,20 @@ public class MonitorMain implements Showcase {
         } catch (InterruptedException | InvocationTargetException ex) {
         }
 
-        Portal portalA = new MonitorAgent(10, "Portal A", null,frame);
-        Portal portalB = new Portal(10, "Portal B", portalA);
-        MetaAgent agentB = new LogMetaAgent(10, "Agent B", portalB);
-        Portal portalC = new Portal(10, "Portal C", portalB);
+        Portal portalA = new MonitorAgent(10, "Portal 1", null,frame);
+        Portal portalB = new Portal(10, "Portal 2", portalA);
+        Portal portalC = new Portal(10, "Portal 3", portalB);
+
         MetaAgent agentA = new LogMetaAgent(10, "Agent A", portalC);
+        MetaAgent agentB = new LogMetaAgent(10, "Agent B", portalB);
+        MetaAgent agentC = new LogMetaAgent(10, "Agent C", portalB);
+        MetaAgent agentD = new LogMetaAgent(10, "Agent D", portalB);
         
         portalA.addChild(portalB);
         portalB.addChild(portalC);
         portalB.addChild(agentB);
+        portalB.addChild(agentC);
+        portalB.addChild(agentD);
         portalC.addChild(agentA);
         
         try {

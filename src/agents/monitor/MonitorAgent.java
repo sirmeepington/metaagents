@@ -6,7 +6,6 @@ import agents.Portal;
 import agents.monitor.ui.MonitorFrame;
 import agents.util.EncodingUtil;
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * A portal wrapper that intercepts and logs / copies / exports messages
@@ -17,6 +16,9 @@ import java.util.Collections;
  */
 public class MonitorAgent extends Portal {
 
+    /**
+     * The UI frame for the Monitor.
+     */
     private final MonitorFrame frame;
     
     public MonitorAgent(int capacity, String name, Portal parent, MonitorFrame monitor) {
@@ -39,7 +41,6 @@ public class MonitorAgent extends Portal {
         {
             return;
         }
-        
         // Intercept and log messages for to direct children.
         receive.addMessage(message);
     }
@@ -52,15 +53,10 @@ public class MonitorAgent extends Portal {
     protected void log(Message message){
         if (frame == null)
             return;
-            
         ArrayList<String> path = (ArrayList<String>)
                 EncodingUtil.BytesToObj(message.getData());
-        
         if (path == null)
             return;
-
-        System.out.println("path: "+path.toString());
-
         frame.addPath(path);
         
     }
