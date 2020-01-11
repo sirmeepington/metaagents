@@ -37,6 +37,7 @@ public class StructurePanel extends JPanel{
     }
     
     private void addTree(){
+        this.tree.setPreferredSize(MonitorFrame.SIZE);
         this.add(tree);
     }
     
@@ -57,14 +58,29 @@ public class StructurePanel extends JPanel{
                 curNode.add(node);
                 curNode = node;
             } else {
-                curNode = curNode.getch
+                curNode = getExistingChild(curNode,stackValue);
             }
         }
-        
         this.repaint();
     }
     
+    private DefaultMutableTreeNode getExistingChild(DefaultMutableTreeNode curNode, String value){
+        for (int i = 0; i < curNode.getChildCount(); i++){
+            DefaultMutableTreeNode child = (DefaultMutableTreeNode) curNode.getChildAt(i);
+            if (child != null && ((String)child.getUserObject()).equals(value))
+                return child;
+        }
+        return curNode;
+    }
+    
     private boolean canAdd(String data, DefaultMutableTreeNode curNode){
-        
+        for(int i = 0; i < curNode.getChildCount(); i++){
+            DefaultMutableTreeNode child = (DefaultMutableTreeNode) curNode.getChildAt(i);
+            String str = (String) child.getUserObject();
+            if (str.equals(data)){
+                return false;
+            }
+        }
+        return true;
     }
 }
