@@ -71,9 +71,9 @@ public class DhcpClientAgent extends NetworkableAgent implements DhcpClient {
         String msg = EncodingUtil.BytesToString(message.getData());
         String[] in = msg.split("\\|");
         if (msg.contains("|")){
-            msg = in[0].toLowerCase();
+            msg = in[0];
         }
-        switch (msg){
+        switch (msg.toLowerCase()){
             case "offer":
                 System.out.println("[DCHP Client "+getName()+"] Receieved server offer from "+message.getSender());
                 dhcpRequest(message.getSender());
