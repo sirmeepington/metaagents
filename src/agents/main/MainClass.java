@@ -3,6 +3,7 @@ package agents.main;
 import agents.impl.dhcp.DhcpAgents;
 import agents.impl.misc.LogAgents;
 import agents.impl.sockets.SocketMain;
+import agents.monitor.MonitorMain;
 
 /**
  * Welcome to Meta Agents.
@@ -27,7 +28,8 @@ public class MainClass {
                     + " below.\n"
                     + "DHCP Protocol: DhcpAgents [dhcp]\n"
                     + "Generic Logging: LogAgents [generic]\n"
-                    + "Sockets: SocketMain [sockets]");
+                    + "Sockets: SocketMain [sockets]\n"
+                    + "Agent System Structure Monitor: MonitorMain [monitor]");
             return;
         }
         
@@ -44,6 +46,11 @@ public class MainClass {
             case "sockets":
                 showcase = new SocketMain();
                 break;
+                
+            case "monitor":
+                showcase = new MonitorMain();
+                break;
+                
             default:
                 return;
         }
