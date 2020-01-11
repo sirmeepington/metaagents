@@ -3,6 +3,10 @@ package agents.monitor;
 import agents.Message;
 import agents.MetaAgent;
 import agents.Portal;
+import agents.monitor.ui.MonitorFrame;
+import agents.util.EncodingUtil;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * A portal wrapper that intercepts and logs / copies / exports messages
@@ -13,8 +17,11 @@ import agents.Portal;
  */
 public class MonitorAgent extends Portal {
 
-    public MonitorAgent(int capacity, String name, Portal parent) {
+    private final MonitorFrame frame;
+    
+    public MonitorAgent(int capacity, String name, Portal parent, MonitorFrame monitor) {
         super(capacity, name, parent);
+        this.frame = monitor;
     }
     
     /**
@@ -27,25 +34,35 @@ public class MonitorAgent extends Portal {
     @Override
     protected void executeOnSubAgent(String agent, Message message){
         MetaAgent receive = getSubAgentOrParent(agent);
+        log(message);
         if (receive == null)
         {
             return;
         }
         
         // Intercept and log messages for to direct children.
-        log(receive,message);
         receive.addMessage(message);
     }
     
     /**
      * Logs that the given message has been intercepted heading towards the 
      * given target.
-     * @param target The target that the message is intended to be for.
      * @param message The message that has been intercepted.
      */
-    protected void log(MetaAgent target, Message message){
-        System.out.println("["+getName()+"] Intercepted message for " 
-                + target.getName()+": \n\t"+message);
+    protected void log(Message message){
+        if (frame == null)
+            return;
+            
+        ArrayList<String> path = (ArrayList<String>)
+                EncodingUtil.BytesToObj(message.getData());
+        
+        if (path == null)
+            return;
+
+        System.out.println("path: "+path.toString());
+
+        frame.addPath(path);
+        
     }
     
     
