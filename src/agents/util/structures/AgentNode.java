@@ -25,13 +25,6 @@ public class AgentNode<T> {
         this.parent = null;
     }
     
-    public void addChild(AgentNode<T> node){
-        node.parent = this;
-        if (!this.containsChild(node.getData())){
-            this.children.add(node);
-        }
-    }
-    
     public AgentNode<T> getDirectChild(T data){
         for(AgentNode<T> agent : children){
             if (agent.data.equals(data))
@@ -76,18 +69,6 @@ public class AgentNode<T> {
         children.remove(node);
         return true;
     }
-    
-    public int getDepth(){
-        return getDepth(this);
-    }
-    
-    private int getDepth(AgentNode<T> child){
-        int depth = 1;
-        for(AgentNode<T> c : child.children){
-            depth = Math.max(depth,1+getDepth(c));
-        }
-        return depth;
-    }
 
     public T getData() {
         return data;
@@ -103,6 +84,10 @@ public class AgentNode<T> {
 
     public AgentNode<T> getParent() {
         return parent;
+    }
+    
+    protected void setParent(AgentNode<T> parent){
+        this.parent = parent;
     }
 
     @Override

@@ -5,11 +5,13 @@
  */
 package agents.monitor.ui;
 
-import agents.util.structures.AgentNode;
-import java.awt.Color;
-import java.awt.Graphics;
+import java.util.Enumeration;
 import java.util.Stack;
 import javax.swing.JPanel;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 
 /**
  *
@@ -18,7 +20,9 @@ import javax.swing.JPanel;
 public class StructurePanel extends JPanel{
 
     private final MonitorFrame rootFrame;
-    private AgentNode<String> rootNode;
+    private DefaultMutableTreeNode rootNode;
+    private final JTree tree;
+    private final DefaultTreeModel treeModel;
     
     private final int agentWidth = 50;
     private final int agentHeight = 50;
@@ -27,57 +31,40 @@ public class StructurePanel extends JPanel{
     
     public StructurePanel(MonitorFrame frame){
         this.rootFrame = frame;
+        this.treeModel = new DefaultTreeModel(null);
+        this.tree = new JTree(treeModel);
+        addTree();
+    }
+    
+    private void addTree(){
+        this.add(tree);
     }
     
     public void addPath(Stack<String> path){
         String root = path.pop();
         if (rootNode == null){
-            rootNode = new AgentNode<>(root);
+            rootNode = new DefaultMutableTreeNode(root);
+            treeModel.setRoot(rootNode);
         } else {
-            if (!rootNode.getData().equals(root)) // Different root node.
+            if (!rootNode.getUserObject().equals(root)) // Different root node.
                 return;
         }
-        AgentNode<String> curNode = rootNode;
+        DefaultMutableTreeNode curNode = rootNode;
         while(!path.isEmpty()) {
             String stackValue = path.pop();
-            AgentNode<String> node = new AgentNode<>(stackValue);
-            curNode.addChild(node);
-            curNode = node;
+            if (canAdd(stackValue,curNode)){
+                DefaultMutableTreeNode node = new DefaultMutableTreeNode(stackValue);
+                curNode.add(node);
+                curNode = node;
+            } else {
+                curNode = curNode.getch
+            }
         }
         
         this.repaint();
     }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        if (rootNode == null || lock != null)
-            return;
-        
-        lock = new Object();
-        int depth = rootNode.getDepth();
-        AgentNode<String> node = rootNode;
-        System.out.println(rootNode.getChildren().toString());
-        for (int i = 1; i <= depth; i++){
-            int childCount = node.getChildren() == null ? 0 : node.getChildren().size();
-            for(int j = 1; j <= childCount; j++){
-                System.out.println("Child count: "+childCount+"/"+j+" - DepthIter: "+i+"/"+depth);
-                paintNode(g, node, j, depth, i);
-            }
-        }
-        
-        lock = null;
-    }
     
-    private void paintNode(Graphics g, AgentNode<String> node, int childNo, int depthTotal, int depthIter){
-        int x = MonitorFrame.SIZE.width / 2 * childNo;
-        int y = (-100)+MonitorFrame.SIZE.height / depthTotal * depthIter;
-
-        x = x - (agentWidth/2);
-        y = y - (agentHeight/2);
-        g.setColor(Color.black);
-        g.fillOval(x, y, agentWidth, agentHeight);
-        g.setColor(Color.white);
-        g.drawString(node.getData(), x - (agentWidth/2), y - (agentHeight/2));
+    private boolean canAdd(String data, DefaultMutableTreeNode curNode){
+        
     }
-    
 }
