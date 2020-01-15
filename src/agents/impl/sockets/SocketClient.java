@@ -32,15 +32,21 @@ public class SocketClient extends SocketAgent {
      */
     private volatile boolean running;
     
-    public SocketClient(int capacity, String name, Portal parent, int port) {
+    /**
+     * The address of the server to connect to.
+     */
+    private String serverAddress;
+    
+    public SocketClient(int capacity, String name, Portal parent, String address, int port) {
         super(capacity, name, parent, port);
+        this.serverAddress = address;
     }
     
     @Override
     protected void threadRun(){
         try {
             running = true;
-            client = new Socket("localhost",getPort());
+            client = new Socket(serverAddress,getPort());
             System.out.println("["+getName()+"] Created connection to " +
                     client.getInetAddress());
         } catch (IOException ex) {

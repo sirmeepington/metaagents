@@ -25,7 +25,7 @@ public class SocketMain implements Showcase {
         
         // Create a mini network called network A.
         Portal portalA = new Portal(20, "Portal A"); 
-        SocketAgent clientA = new SocketClient(20, "Client A", portalA, port);
+        SocketAgent clientA = new SocketClient(20, "Client A", portalA, "localhost", port);
         LogMetaAgent agentA = new LogMetaAgent(10, "Agent A", portalA);
         portalA.addChild(agentA);
         portalA.addChild(clientA);
@@ -33,7 +33,7 @@ public class SocketMain implements Showcase {
 
         // Create a mini network called network B.
         Portal portalB = new Portal(20, "Portal B"); 
-        SocketAgent clientB = new SocketClient(20, "Client B", portalB, port);
+        SocketAgent clientB = new SocketClient(20, "Client B", portalB, "localhost", port);
         LogMetaAgent agentB = new LogMetaAgent(10, "Agent B", portalB);
         portalB.addChild(agentB);
         portalB.addChild(clientB);
